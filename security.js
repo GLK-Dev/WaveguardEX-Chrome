@@ -386,41 +386,46 @@
   function monitorSuspiciousActivity() {
     if (!isSecurityEnabled) return;
 
-    // Отслеживаем множественные редиректы (признак malware)
+    // Отслеживаем множественные автоматические редиректы
     let redirectCount = 0;
-    const startURL = window.location.href;
+    let lastURL = window.location.href;
+    let userInteracted = false;
 
-    const redirectObserver = new MutationObserver(() => {
-      if (window.location.href !== startURL) {
-        redirectCount++;
-        
-        if (redirectCount > 3) {
-          console.warn('[Waveguard Security] Обнаружено подозрительное количество редиректов');
-          redirectObserver.disconnect();
-        }
-      }
-    });
-
-    redirectObserver.observe(document, { subtree: true, childList: true });
-
-    // Отслеживаем автоматические загрузки
-    let downloadAttempts = 0;
+    // Клик означает, что пользователь сам инициировал навигацию (например, в SPA вроде YouTube)
     document.addEventListener('click', () => {
-      downloadAttempts = 0;
-    });
+      userInteracted = true;
+      redirectCount = 0;
+      setTimeout(() => { userInteracted = false; }, 5000); // Сбрасываем флаг через 5 секунд
+    }, { capture: true, passive: true });
 
-    // Таймер для обнаружения автозагрузок
-    const downloadObserver = new MutationObserver(() => {
-      const downloads = document.querySelectorAll('a[download], iframe[src*="download"]');
-      if (downloads.length > 0) {
-        downloadAttempts++;
-        if (downloadAttempts > 2) {
-          console.warn('[Waveguard Security] Обнаружена автоматическая загрузка файлов');
+    // Проверяем смену URL через setInterval вместо тяжелого MutationObserver
+    setInterval(() => {
+      if (window.location.href !== lastURL) {
+        if (!userInteracted) {
+          redirectCount++;
+          if (redirectCount > 3) {
+            console.warn('[Waveguard Security] Обнаружено подозрительное количество автоматических редиректов');
+            // В реальной ситуации здесь можно заблокировать переход
+          }
         }
+        lastURL = window.location.href;
       }
-    });
+    }, 1000);
 
-    downloadObserver.observe(document.body, { childList: true, subtree: true });
+    // Перехватываем программные клики по ссылкам (попытка автозагрузки)
+    const originalClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function() {
+      if (!userInteracted && (this.hasAttribute('download') || this.href.match(/\.(exe|msi|bat|cmd|scr|vbs)$/i))) {
+        console.warn('[Waveguard Security] Заблокирована скрытая автозагрузка файла:', this.href);
+        blockedThreatsCount++;
+        chrome.runtime.sendMessage({ 
+          action: 'threatBlocked',
+          threat: 'pup_download'
+        });
+        return; // Блокируем клик
+      }
+      return originalClick.apply(this, arguments);
+    };
   }
 
   // Инициализация всех защитных механизмов
