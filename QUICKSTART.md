@@ -131,3 +131,4 @@ After changing the code:
 **Done! Enjoy an ad-free internet! 🎉**
 
 If you have questions, check README.md or INSTALL.md for more information.
+

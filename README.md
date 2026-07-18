@@ -1,4 +1,4 @@
-# Waveguard AdBlocker 🛡️ Security Edition
+# Waveguard AdBlocker 🛡️ Privacy & Security Suite
 
 A powerful extension for Chrome that blocks ads **and protects against cyber threats**: phishing, malicious sites, cryptojacking, and potentially unwanted programs (PUPs).
 
@@ -10,7 +10,14 @@ A powerful extension for Chrome that blocks ads **and protects against cyber thr
 - 🎵 **Ad blocking on TikTok** - removes ads from the feed and skips ad posts
 - 📱 **Ad blocking on Facebook/Instagram** - hides sponsored posts and Stories
 
-### 🛡️ Threat Protection (New in v4.0!)
+### 🚀 Advanced Privacy & Next-Gen Security (New in v5.0!)
+- 🤖 **AI DOM-Analysis** - Smart heuristic blocker for native ads and sponsored content
+- 🛡️ **GenAI Data Protection (DLP)** - Masks sensitive data (PII) before sending to AI chatbots (ChatGPT, Claude)
+- 🍪 **Auto-Reject Cookie Banners** - Automatically clicks "Reject All" or hides cookie consent popups
+- 🕵️‍♂️ **Anti-Fingerprinting** - Anonymizes Canvas, WebGL, and Audio API fingerprints
+- 🔗 **URL Tracking Remover** - Automatically strips tracking tags (UTM, fbclid) from URLs
+- ⚡ **Mini Mode** - Toggle to disable heavy DOM scripts for maximum performance
+### 🛡️ Threat Protection (v4.0)
 - 🎣 **Anti-Phishing** - blocks fake banking sites, stealing passwords
 - ☠️ **Anti-Malware** - prevents drive-by downloads of malware
 - ⛏️ **Anti-Cryptojacking** - blocks hidden mining scripts
@@ -175,7 +182,7 @@ Waveguard/
 
 ## 🆚 Why Waveguard?
 
-| Feature | Waveguard v4.0 | AdBlock Plus | uBlock Origin |
+| Feature | Waveguard v5.0 | AdBlock Plus | uBlock Origin |
 |---------|---------------|--------------|---------------|
 | Ad Blocking | ✅ | ✅ | ✅ |
 | YouTube Skipping | ✅ | Partially | Partially |
@@ -256,3 +263,4 @@ If you find a bug or have a suggestion, create an Issue in the repository.
 ---
 
 **Made with ❤️ for a free Internet without ads**
+

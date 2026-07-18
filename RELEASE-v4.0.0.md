@@ -392,8 +392,8 @@ A: Yes, planned for v4.1 (Q1 2026).
 
 ## 📞 Support
 
-- **GitHub:** https://github.com/glkdev
-- **Issues:** https://github.com/glkdev/Waveguard/issues
+- **GitHub:** https://github.com/GLK-Dev
+- **Issues:** https://github.com/GLK-Dev/WaveguardEX-Chrome/issues
 - **Author:** GLK Dev
 
 ---

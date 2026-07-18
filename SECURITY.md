@@ -108,6 +108,38 @@ Clickjacking - this is an attack where an attacker overlays a transparent iframe
 - Automatic file downloads without user action
 - Suspicious DOM manipulations
 
+### 8. GenAI Data Protection (DLP)
+
+**What is it?**  
+Accidental leakage of Personally Identifiable Information (PII) like credit cards, phone numbers, or emails into AI chatbots (ChatGPT, Claude, etc.).
+
+**How it works:**
+- Real-time scanning of input fields and `contenteditable` elements on AI domains
+- Automatically masks sensitive data before submission
+- Uses a `TreeWalker` to preserve rich text HTML structure
+- Shows a non-intrusive warning popup upon masking
+
+### 9. Anti-Fingerprinting
+
+**What is it?**  
+Fingerprinting is a technique used by advertisers to track your device without cookies by analyzing hardware variations (Canvas drawing, WebGL rendering, Audio buffering).
+
+**How it works:**
+- Injects `anti-fingerprint.js` into the main page context
+- Adds cryptographic noise to `HTMLCanvasElement.prototype.toDataURL` and `CanvasRenderingContext2D.prototype.getImageData`
+- Spoofs WebGL parameters (`UNMASKED_VENDOR_WEBGL`)
+- Normalizes `navigator.hardwareConcurrency` and `navigator.deviceMemory`
+
+### 10. URL Tracking Remover
+
+**What is it?**  
+Advertisers often append tracking tags like `utm_source` or `fbclid` to links to track clicks across websites.
+
+**How it works:**
+- Intercepts page navigation early in the background
+- Automatically removes known tracking parameters from the URL before the page loads
+- Transparent to the user and preserves normal website functionality
+
 ## 📊 Statistics
 
 The **"🛡️ Threats"** counter in the interface shows the number of blocked threats:
@@ -218,7 +250,7 @@ The threat database is updated along with the extension. Automatic updating is p
 If Waveguard blocked an incorrect site:
 
 1. Click **"Continue at my own risk"**
-2. Create an Issue: [GitHub Issues](https://github.com/glkdev/Waveguard/issues)
+2. Create an Issue: [GitHub Issues](https://github.com/GLK-Dev/WaveguardEX-Chrome/issues)
 3. Temporarily disable protection for this site (in settings)
 
 ## 🧩 Interaction with other features
@@ -272,11 +304,11 @@ Waveguard Security works **together** with other features:
 - ✅ Edge 88+
 - ✅ Brave 1.20+
 - ✅ Opera 74+
-- ⏳ Firefox (support in v4.1)
+- ⏳ Firefox (support in v5.1)
 
 ## 🚀 Future Plans
 
-Planned in version 4.1:
+Planned in version 5.1:
 
 - [ ] Automatic threat database updates
 - [ ] Integration with Google Safe Browsing API
@@ -297,18 +329,19 @@ A: No. Checks occur locally in fractions of a millisecond.
 A: Yes. In the advanced settings, there is a separate switch.
 
 **Q: How often is the threat database updated?**  
-A: Currently - with each version of the extension. Auto-updates are planned in v4.1.
+A: Currently - with each version of the extension. Auto-updates are planned in v5.1.
 
 **Q: Is it privacy-safe?**  
 A: Yes. The extension does not collect or send your data. All work occurs locally.
 
 ## 📞 Contacts
 
-- **GitHub:** https://github.com/glkdev
-- **Issues:** https://github.com/glkdev/Waveguard/issues
+- **GitHub:** https://github.com/GLK-Dev
+- **Issues:** https://github.com/GLK-Dev/WaveguardEX-Chrome/issues
 - **Author:** GLK Dev
 
 ---
 
-**Waveguard v4.0.0 Security Edition** 🛡️  
+**Waveguard v5.0.0 Privacy & Security Suite** 🛡️  
 *Security for where we spend the most time - the Internet.*
+
