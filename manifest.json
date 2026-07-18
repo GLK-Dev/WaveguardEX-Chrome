@@ -37,8 +37,11 @@
         "<all_urls>"
       ],
       "js": [
+        "inject-fingerprint.js",
         "content.js",
-        "security.js"
+        "security.js",
+        "cookie-banner.js",
+        "ai-dom-scanner.js"
       ],
       "css": [
         "content.css"
@@ -72,6 +75,18 @@
         "facebook.js"
       ],
       "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.chatgpt.com/*",
+        "*://*.claude.ai/*",
+        "*://copilot.microsoft.com/*",
+        "*://gemini.google.com/*"
+      ],
+      "js": [
+        "dlp.js"
+      ],
+      "run_at": "document_start"
     }
   ],
   "action": {
@@ -86,7 +101,8 @@
     {
       "resources": [
         "content.css",
-        "malicious-domains.json"
+        "malicious-domains.json",
+        "anti-fingerprint.js"
       ],
       "matches": [
         "<all_urls>"

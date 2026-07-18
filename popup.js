@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const antiTrackingToggle = document.getElementById('antiTrackingToggle');
   const blockAnalyticsToggle = document.getElementById('blockAnalyticsToggle');
   const securityToggle = document.getElementById('securityToggle');
+const miniModeToggle = document.getElementById('miniModeToggle');
   const blockedCountElement = document.getElementById('blockedCount');
   const threatsCountElement = document.getElementById('threatsCount');
   const resetCounterBtn = document.getElementById('resetCounter');
@@ -186,3 +187,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, 1000);
 });
+

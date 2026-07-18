@@ -83,6 +83,7 @@ const translations = {
     antiTracking: 'Protección anti-rastreo',
     blockAnalytics: 'Bloquear analítica',
     securityProtection: '🛡️ Protección contra phishing/malware',
+    miniMode: '⚡ Modo Mini (Rendimiento)',
     resetCounter: 'Restablecer contador',
     developedBy: 'Desarrollado por'
   }
@@ -111,3 +112,4 @@ function applyTranslations(lang) {
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = { translations, applyTranslations };
 }
+

@@ -166,3 +166,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   
   return true; // Необходимо для асинхронного ответа
 });
+
+
+// --- Waveguard URL Tracking Remover ---
+const TRACKING_PARAMS = [
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+  'fbclid', 'gclid', 'gclsrc', 'dclid', 'zanpid',
+  'msclkid', 'mc_eid', '_bta_tid', '_bta_c', 'igshid', '_hsenc', '_hsmi'
+];
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    try {
+      const url = new URL(changeInfo.url);
+      let paramsRemoved = false;
+      
+      TRACKING_PARAMS.forEach(param => {
+        if (url.searchParams.has(param)) {
+          url.searchParams.delete(param);
+          paramsRemoved = true;
+        }
+      });
+      
+      if (paramsRemoved) {
+        chrome.tabs.update(tabId, { url: url.toString() });
+      }
+    } catch (e) {
+      // Invalid URL
+    }
+  }
+});
+// --------------------------------------
