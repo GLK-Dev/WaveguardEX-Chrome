@@ -74,23 +74,32 @@
       
       if (batchTimeout) clearTimeout(batchTimeout);
       batchTimeout = setTimeout(() => {
-        chrome.runtime.sendMessage({
-          action: 'adBlocked',
-          count: newlyBlocked
-        });
+        try {
+          chrome.runtime.sendMessage({
+            action: 'adBlocked',
+            count: newlyBlocked
+          });
+        } catch (e) {
+          // Extension context invalidated - вкладка требует перезагрузки после обновления расширения
+        }
       }, 500);
     }
   }
 
   // Проверяем настройки при загрузке
-  chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
-    if (response && response.settings) {
-      isEnabled = response.settings.adBlockEnabled;
-      if (isEnabled) {
-        removeAds();
+  try {
+    chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
+      if (chrome.runtime.lastError) return; // Игнорируем ошибки при закрытии
+      if (response && response.settings) {
+        isEnabled = response.settings.adBlockEnabled;
+        if (isEnabled) {
+          removeAds();
+        }
       }
-    }
-  });
+    });
+  } catch (e) {
+    // Ошибка контекста
+  }
 
   // Наблюдение за динамически добавляемыми элементами (с throttling)
   let throttleTimeout = null;
@@ -140,7 +149,9 @@
           
           if (adPatterns.some(pattern => value.includes(pattern))) {
             console.log('[Waveguard] Заблокирован iframe:', value);
-            chrome.runtime.sendMessage({ action: 'adBlocked' });
+            try {
+              chrome.runtime.sendMessage({ action: 'adBlocked' });
+            } catch (e) {}
             return; // Не устанавливаем src
           }
         }
