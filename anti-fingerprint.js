@@ -25,7 +25,7 @@
     
     // Add subtle noise to the canvas data
     const r = Math.random() * 2 - 1; // -1 to 1
-    ctx.fillStyle = \gba(255, 255, 255, \)\;
+    ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(r) * 0.01})`;
     ctx.fillRect(0, 0, width, height);
   };
 
