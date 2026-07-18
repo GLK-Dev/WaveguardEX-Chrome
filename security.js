@@ -338,20 +338,26 @@
     // Блокируем известные майнинг объекты
     const cryptoObjects = ['CoinHive', 'CRLT', 'JSEcoin'];
     cryptoObjects.forEach(obj => {
-      Object.defineProperty(window, obj, {
-        get: function() {
-          console.log('[Waveguard Security] Заблокирована попытка майнинга:', obj);
-          blockedThreatsCount++;
-          chrome.runtime.sendMessage({ 
-            action: 'threatBlocked',
-            threat: 'cryptojacking'
-          });
-          return undefined;
-        },
-        set: function() {
-          return false;
-        }
-      });
+      try {
+        Object.defineProperty(window, obj, {
+          get: function() {
+            console.log('[Waveguard Security] Заблокирована попытка майнинга:', obj);
+            blockedThreatsCount++;
+            chrome.runtime.sendMessage({ 
+              action: 'threatBlocked',
+              threat: 'cryptojacking'
+            });
+            return undefined;
+          },
+          set: function() {
+            return false;
+          },
+          configurable: true
+        });
+      } catch (e) {
+        // Свойство уже может быть защищено другим блокировщиком
+        console.log('[Waveguard Security] Объект ' + obj + ' уже защищен или не может быть переопределен.');
+      }
     });
   }
 
