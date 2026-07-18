@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Генератор иконок</title>
+</head>
+<body>
+  <h1>Генератор иконок для Waveguard</h1>
+  <canvas id="canvas" width="128" height="128"></canvas>
+  
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Функция для создания иконки заданного размера
+    function createIcon(size) {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = size;
+      tempCanvas.height = size;
+      const tempCtx = tempCanvas.getContext('2d');
+      
+      const scale = size / 128;
+      
+      // Градиент фона
+      const gradient = tempCtx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      
+      // Скругленный прямоугольник
+      const radius = 28 * scale;
+      tempCtx.fillStyle = gradient;
+      tempCtx.beginPath();
+      tempCtx.moveTo(radius, 0);
+      tempCtx.lineTo(size - radius, 0);
+      tempCtx.quadraticCurveTo(size, 0, size, radius);
+      tempCtx.lineTo(size, size - radius);
+      tempCtx.quadraticCurveTo(size, size, size - radius, size);
+      tempCtx.lineTo(radius, size);
+      tempCtx.quadraticCurveTo(0, size, 0, size - radius);
+      tempCtx.lineTo(0, radius);
+      tempCtx.quadraticCurveTo(0, 0, radius, 0);
+      tempCtx.fill();
+      
+      // Щит
+      tempCtx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      tempCtx.beginPath();
+      tempCtx.moveTo(64 * scale, 25 * scale);
+      tempCtx.lineTo(90 * scale, 35 * scale);
+      tempCtx.lineTo(90 * scale, 60 * scale);
+      tempCtx.quadraticCurveTo(90 * scale, 85 * scale, 64 * scale, 100 * scale);
+      tempCtx.quadraticCurveTo(38 * scale, 85 * scale, 38 * scale, 60 * scale);
+      tempCtx.lineTo(38 * scale, 35 * scale);
+      tempCtx.closePath();
+      tempCtx.fill();
+      
+      // Круг с перечеркиванием
+      tempCtx.strokeStyle = '#667eea';
+      tempCtx.lineWidth = 4 * scale;
+      tempCtx.beginPath();
+      tempCtx.arc(64 * scale, 60 * scale, 18 * scale, 0, Math.PI * 2);
+      tempCtx.stroke();
+      
+      // Линия перечеркивания
+      tempCtx.lineCap = 'round';
+      tempCtx.beginPath();
+      tempCtx.moveTo(52 * scale, 48 * scale);
+      tempCtx.lineTo(76 * scale, 72 * scale);
+      tempCtx.stroke();
+      
+      return tempCanvas;
+    }
+    
+    // Создаем иконку 128x128
+    const icon128 = createIcon(128);
+    ctx.drawImage(icon128, 0, 0);
+    
+    // Функция для скачивания
+    function downloadIcon(size) {
+      const iconCanvas = createIcon(size);
+      const link = document.createElement('a');
+      link.download = `icon${size}.png`;
+      link.href = iconCanvas.toDataURL('image/png');
+      link.click();
+    }
+    
+    // Добавляем кнопки для скачивания
+    ['16', '48', '128'].forEach(size => {
+      const btn = document.createElement('button');
+      btn.textContent = `Скачать ${size}x${size}`;
+      btn.onclick = () => downloadIcon(parseInt(size));
+      document.body.appendChild(btn);
+      document.body.appendChild(document.createElement('br'));
+    });
+  </script>
+</body>
+</html>

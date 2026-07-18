@@ -1,0 +1,68 @@
+{
+  "phishing": [
+    "*.phishing-site.com",
+    "*.fake-bank.com",
+    "*.secure-login-verify.com",
+    "*.account-verification.net",
+    "*.paypal-secure.net",
+    "*.amazon-verify.com",
+    "*.google-accounts-verify.com",
+    "*.apple-support-secure.com",
+    "*.microsoft-security-check.com"
+  ],
+  "malware": [
+    "*.malware-host.com",
+    "*.virus-download.net",
+    "*.trojan-site.com",
+    "*.exploit-kit.net",
+    "*.drive-by-download.com"
+  ],
+  "cryptojacking": [
+    "coinhive.com",
+    "coin-hive.com",
+    "cnhv.co",
+    "jsecoin.com",
+    "crypto-loot.com",
+    "cryptoloot.pro",
+    "webminepool.com",
+    "listat.biz",
+    "lmodr.biz",
+    "monerominer.rocks",
+    "*.rocks",
+    "coinhive.com",
+    "coin-have.com",
+    "minero.cc",
+    "cloudcoins.co",
+    "papoto.com",
+    "jsccnn.com"
+  ],
+  "pup_domains": [
+    "*.download-now.com",
+    "*.free-download-manager.com",
+    "*.speedtest-optimizer.com",
+    "*.driver-update.net",
+    "*.pc-cleaner.com",
+    "*.system-optimizer.net",
+    "*.toolbar-installer.com",
+    "*.browser-extension-pack.com"
+  ],
+  "suspicious_tlds": [
+    ".tk",
+    ".ml",
+    ".ga",
+    ".cf",
+    ".gq"
+  ],
+  "scam_keywords": [
+    "win-prize",
+    "lottery-winner",
+    "free-iphone",
+    "congratulations-winner",
+    "claim-reward",
+    "gift-card-generator",
+    "bitcoin-generator",
+    "hack-password",
+    "free-vbucks",
+    "free-robux"
+  ]
+}

@@ -1,0 +1,67 @@
+/* CSS для блокировки рекламных элементов */
+
+/* Общие рекламные блоки */
+[class*="advertisement"],
+[id*="advertisement"],
+[class*="ad-container"],
+[id*="ad-container"],
+[class*="adsbygoogle"],
+[data-ad],
+[data-advertisement] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  width: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* Google AdSense */
+ins.adsbygoogle,
+.google-ad,
+#google_ads_iframe {
+  display: none !important;
+}
+
+/* Яндекс реклама */
+.ya-partner,
+#yandex_ad,
+[id*="yandex_rtb"],
+[class*="yandex-ad"] {
+  display: none !important;
+}
+
+/* Популярные рекламные сети */
+[class*="taboola"],
+[id*="taboola"],
+[class*="outbrain"],
+[id*="outbrain"],
+[class*="criteo"],
+[id*="criteo"],
+[class*="pubmatic"],
+[id*="pubmatic"] {
+  display: none !important;
+}
+
+/* Баннеры */
+[class*="banner"],
+[id*="banner"],
+[class*="sponsor"],
+[id*="sponsor"] {
+  display: none !important;
+}
+
+/* Рекламные iframe */
+iframe[src*="doubleclick"],
+iframe[src*="googlesyndication"],
+iframe[src*="googleadservices"],
+iframe[src*="/ads/"],
+iframe[src*="advertising"] {
+  display: none !important;
+}
+
+/* Элементы помеченные как заблокированные */
+[data-ad-blocked="true"] {
+  display: none !important;
+}
