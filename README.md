@@ -1,258 +1,258 @@
 # Waveguard AdBlocker 🛡️ Security Edition
 
-Мощное расширение для Chrome, которое блокирует рекламу **И защищает от онлайн-угроз**: фишинга, вредоносных сайтов, криптоджекинга и нежелательного ПО.
+A powerful extension for Chrome that blocks ads **and protects against cyber threats**: phishing, malicious sites, cryptojacking, and potentially unwanted programs (PUPs).
 
-## 🌟 Основные возможности
+## 🚀 Key Features
 
-### Блокировка рекламы
-- ✅ **Блокировка рекламы на всех сайтах** - удаляет баннеры, всплывающую рекламу и рекламные блоки
-- ✅ **Блокировка рекламы на YouTube** - автоматически пропускает видео-рекламу и скрывает рекламные баннеры
-- ✅ **Блокировка рекламы на TikTok** - удаляет рекламу из ленты и пропускает рекламные видео
-- ✅ **Блокировка рекламы на Facebook/Instagram** - скрывает спонсорские посты и Stories
+### Ad Blocking
+- 🚫 **Ad blocking on all sites** - removes banners, pop-up ads, and video ads
+- 📺 **Ad blocking on YouTube** - automatically skips video ads and hides ad banners
+- 🎵 **Ad blocking on TikTok** - removes ads from the feed and skips ad posts
+- 📱 **Ad blocking on Facebook/Instagram** - hides sponsored posts and Stories
 
-### 🛡️ Защита от угроз (НОВОЕ в v4.0!)
-- 🎣 **Защита от фишинга** - блокирует поддельные сайты, ворующие данные
-- ☠️ **Защита от вредоносов** - предотвращает заражение malware
-- ⛏️ **Защита от криптоджекинга** - блокирует скрытый майнинг криптовалют
-- ⚠️ **Блокировка ПНП** - предупреждает о потенциально нежелательных программах
-- 🚫 **Защита от pop-ups** - агрессивная блокировка всплывающих окон
-- 🔒 **Защита от clickjacking** - предотвращает перехват кликов
+### 🛡️ Threat Protection (New in v4.0!)
+- 🎣 **Anti-Phishing** - blocks fake banking sites, stealing passwords
+- ☠️ **Anti-Malware** - prevents drive-by downloads of malware
+- ⛏️ **Anti-Cryptojacking** - blocks hidden mining scripts
+- 🕷️ **PUP Blocking** - prevents download of potentially unwanted programs
+- 🛑 **Pop-up Blocking** - aggressive blocking of pop-up windows
+- 🖱️ **Anti-Clickjacking** - prevents invisible frames
 
-### Удобство
-- ✅ **Мультиязычность** - интерфейс на 5 языках (RU, UK, EN, HE, ES)
-- ✅ **Счетчики** - отслеживание заблокированной рекламы и угроз
-- ✅ **Простой интерфейс** - удобное управление через popup-окно
-- ✅ **Раздельное управление** - гибкие настройки для каждой платформы
+### Convenience
+- 🌍 **Multilingual** - interface in 5 languages (RU, UK, EN, HE, ES)
+- 📊 **Counter** - tracking of blocked ads and threats
+- 🎛️ **Simple interface** - convenient control via popup menu
+- ⚙️ **Detailed settings** - flexible configuration for each function
 
-## 📦 Установка
+## 📥 Installation
 
-### Способ 1: Загрузка в режиме разработчика
+### Method 1: Loading in Developer Mode
 
-1. Скачайте или склонируйте этот репозиторий
-2. Откройте Chrome и перейдите на страницу `chrome://extensions/`
-3. Включите **Режим разработчика** (Developer mode) в правом верхнем углу
-4. Нажмите **Загрузить распакованное расширение** (Load unpacked)
-5. Выберите папку с расширением `Waveguard`
-6. Готово! Расширение установлено и активно
+1. Download or clone this repository
+2. Open Chrome and go to the page chrome://extensions/
+3. Enable **Developer mode** (toggle in the top right corner)
+4. Click **Load unpacked**
+5. Select the folder with the Waveguard extension
+6. Done! The extension is installed and active
 
-## 🎯 Использование
+## 💻 Usage
 
-1. После установки иконка расширения появится в панели инструментов Chrome
-2. Кликните по иконке, чтобы открыть панель управления
-3. Переключатели позволяют:
-   - Включить/выключить блокировку рекламы на обычных сайтах
-   - Включить/выключить блокировку рекламы на YouTube
-   - Сбросить счетчик заблокированной рекламы
+1. After installation, the extension icon will appear in the Chrome toolbar
+2. Click on the icon to open the control panel
+3. Toggle the switches:
+   - Enable/disable ad blocking on regular sites
+   - Enable/disable ad blocking on YouTube
+   - View the counter of blocked ads
 
-### Автоматическая работа
+### Automatic Operation
 
-Расширение работает автоматически:
-- На обычных сайтах удаляет рекламные блоки, баннеры и всплывающую рекламу
-- На YouTube автоматически пропускает видео-рекламу и скрывает рекламные элементы
-- Блокирует запросы к известным рекламным доменам
+The extension works automatically:
+- On regular sites, it removes video ads, banners, and pop-up ads
+- On YouTube, it automatically skips video ads and hides ad banners
+- Blocks tracking and third-party advertising cookies
 
-## 🔧 Технические детали
+## 🛠️ Technical Details
 
-### Структура проекта
+### Project Structure
 
-```
+`
 Waveguard/
-├── manifest.json              # Манифест расширения (Manifest V3)
-├── rules.json                 # 55 правил блокировки (declarativeNetRequest)
-├── malicious-domains.json     # База угроз (фишинг, malware, крипто)
+├── manifest.json              # Extension manifest (Manifest V3)
+├── rules.json                 # 55+ blocking rules (declarativeNetRequest)
+├── malicious-domains.json     # Threat database (phishing, malware, pup)
 ├── background.js              # Service Worker
-├── content.js                 # Общая блокировка рекламы
-├── security.js                # 🛡️ Модуль безопасности (НОВОЕ)
-├── youtube.js                 # Скрипт для YouTube
-├── tiktok.js                  # Скрипт для TikTok
-├── facebook.js                # Скрипт для Facebook/Instagram
-├── popup.html/css/js          # Интерфейс управления
-├── i18n.js                    # Мультиязычность (5 языков)
-├── icons/                     # Иконки расширения
+├── content.js                 # General ad blocking
+├── security.js                # 🛡️ Security engine (New)
+├── youtube.js                 # Script for YouTube
+├── tiktok.js                  # Script for TikTok
+├── facebook.js                # Script for Facebook/Instagram
+├── popup.html/css/js          # Control interface
+├── i18n.js                    # Multilingual support (5 languages)
+├── icons/                     # Extension icons
 └── docs/
     ├── README.md
-    ├── SECURITY.md            # 🛡️ Документация по безопасности
+    ├── SECURITY.md            # 🛡️ Security Documentation
     ├── INSTALL.md
     └── QUICKSTART.md
-```
+`
 
-### Принцип работы
+### Principle of Operation
 
-1. **Background Service Worker** (`background.js`)
-   - Блокирует HTTP-запросы к рекламным доменам (Google Ads, DoubleClick, Yandex Ads и др.)
-   - Ведет статистику заблокированной рекламы
+1. **Background Service Worker** (ackground.js)
+   - Blocks HTTP requests to ad networks (Google Ads, DoubleClick, Yandex Ads, etc.)
+   - Keeps statistics of blocked ads
 
 2. **Content Scripts**
-   - `content.js` - удаляет рекламные элементы на всех сайтах по CSS-селекторам
-   - `youtube.js` - специализированный скрипт для YouTube, который:
-     - Автоматически нажимает кнопку "Пропустить рекламу"
-     - Ускоряет воспроизведение рекламы
-     - Удаляет рекламные баннеры и оверлеи
+   - content.js - removes ad elements on all sites via CSS selectors
+   - youtube.js - specialized script for YouTube, which:
+     - Automatically clicks the "Skip Ad" button
+     - Speeds up unskippable ads
+     - Hides ad banners and overlays
 
 3. **Popup Interface**
-   - Показывает статистику заблокированной рекламы
-   - Позволяет управлять настройками расширения
+   - Shows statistics of blocked ads
+   - Allows controlling extension features
 
-## 🚀 Функции
+## 🎯 Functions
 
-### Блокируемые типы рекламы
+### Blocked Ad Types
 
-- Google AdSense и DoubleClick
-- Яндекс.Директ
-- Баннеры и всплывающие окна
-- Видео-реклама на YouTube
-- Рекламные оверлеи
-- Спонсорский контент
-- Сторонние рекламные сети (Taboola, Outbrain, Criteo и др.)
+- Google AdSense & DoubleClick
+- Yandex.Direct
+- Banners and pop-up windows
+- Video ads on YouTube
+- Text overlays
+- Sponsored content
+- Teaser networks (Taboola, Outbrain, Criteo, etc.)
 
-### 🛡️ Блокируемые угрозы
+### 🛡️ Blocked Threats
 
-**Фишинг:**
-- Поддельные банковские сайты
-- Fake login pages (PayPal, Google, Apple и др.)
-- Мошеннические verification-страницы
+**Phishing:**
+- Fake banking sites
+- Fake login pages (PayPal, Google, Apple, etc.)
+- Fraudulent verification pages
 
-**Вредоносное ПО:**
-- Malware-хосты
+**Malware:**
+- Malware hosts
 - Drive-by downloads
 - Exploit kits
 
-**Криптоджекинг (18+ скриптов):**
+**Cryptojacking (Hidden miners):**
 - CoinHive, JSEcoin, CryptoLoot
 - WebMinePool, MoneroMiner
-- И другие майнинг-скрипты
+- And other web miners
 
-**ПНП (Потенциально нежелательные программы):**
-- Toolbars и adware
+**PUPs (Potentially Unwanted Programs):**
+- Toolbars and adware
 - Fake optimizers
 - Driver updaters
 - Download managers
 
-**Подозрительные домены:**
+**Suspicious Zones:**
 - .tk, .ml, .ga, .cf, .gq zones
-- Scam-паттерны (win-prize, free-iphone, etc.)
+- Scam domains (win-prize, free-iphone, etc.)
 
-### Особенности YouTube-блокировки
+### YouTube Blocking Features
 
-- ⚡ Мгновенный пропуск рекламы
-- 🚀 Ускорение рекламных роликов до 16x
-- 🎯 Удаление баннеров и оверлеев
-- 🔄 Работает при навигации по сайту (SPA)
-- 📱 Поддержка всех типов YouTube-рекламы
+- ⚡ Instant ad skipping
+- ⏩ Speeding up unskippable videos by 16x
+- 🧹 Removing banners and overlays
+- 🔄 Works on page navigation (SPA)
+- 🛡️ Ignores all types of YouTube ads
 
-## ⚙️ Настройки
+## ⚙️ Settings
 
-### Основные настройки
-- `adBlockEnabled` - блокировка рекламы на обычных сайтах
-- `youtubeAdBlockEnabled` - блокировка рекламы на YouTube
-- `tiktokAdBlockEnabled` - блокировка рекламы на TikTok
-- `facebookAdBlockEnabled` - блокировка рекламы на Facebook/Meta
+### Main Settings
+- dBlockEnabled - Ad blocking on regular sites
+- youtubeAdBlockEnabled - Ad blocking on YouTube
+- 	iktokAdBlockEnabled - Ad blocking on TikTok
+- acebookAdBlockEnabled - Ad blocking on Facebook/Meta
 
-### Расширенные настройки
-- `strictMode` - строгий режим (удаление элементов)
-- `antiTracking` - защита от трекинга
-- `blockAnalytics` - блокировка аналитики
-- `securityProtection` - 🛡️ **защита от фишинга/вредоносов**
-- `language` - язык интерфейса (ru/uk/en/he/es)
+### Advanced Settings
+- strictMode - Strict mode (element removal)
+- ntiTracking - Anti-tracking protection
+- lockAnalytics - Analytics blocking
+- securityProtection - 🛡️ **Anti-Phishing/Malware protection**
+- language - UI Language (ru/uk/en/he/es)
 
-### Статистика
-- `blockedAdsCount` - количество заблокированной рекламы
-- `blockedThreatsCount` - 🛡️ **количество заблокированных угроз**
+### Statistics
+- lockedAdsCount - Number of blocked ads
+- lockedThreatsCount - 🛡️ **Number of blocked threats**
 
-## � Документация
+## 📚 Documentation
 
-- **[SECURITY.md](SECURITY.md)** - 🛡️ Подробная документация по функциям безопасности
-- **[INSTALL.md](INSTALL.md)** - Инструкция по установке
-- **[QUICKSTART.md](QUICKSTART.md)** - Быстрый старт
+- **[SECURITY.md](SECURITY.md)** - 🛡️ Detailed documentation on security features
+- **[INSTALL.md](INSTALL.md)** - Installation instructions
+- **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide
 
-## 🛡️ Безопасность и конфиденциальность
+## 🔒 Security and Privacy
 
-- ✅ **Локальная работа** - все проверки происходят на вашем устройстве
-- ✅ **Без сбора данных** - не отправляет статистику на серверы
-- ✅ **Без отслеживания** - не собирает историю посещений
-- ✅ **Открытый исходный код** - код доступен для проверки
-- ✅ **Manifest V3** - современный стандарт безопасности Chrome
+- ✅ **Local operation** - all checks occur on your device
+- ✅ **No data collection** - we do not send statistics to servers
+- ✅ **No tracking** - we do not collect browsing history
+- ✅ **Open source code** - code is available for review
+- ✅ **Manifest V3** - modern Chrome security standard
 
-## 🆚 Почему Waveguard?
+## 🆚 Why Waveguard?
 
-| Функция | Waveguard v4.0 | AdBlock Plus | uBlock Origin |
+| Feature | Waveguard v4.0 | AdBlock Plus | uBlock Origin |
 |---------|---------------|--------------|---------------|
-| Блокировка рекламы | ✅ | ✅ | ✅ |
-| YouTube специфичная | ✅ | Частично | Частично |
+| Ad Blocking | ✅ | ✅ | ✅ |
+| YouTube Skipping | ✅ | Partially | Partially |
 | TikTok/Facebook | ✅ | ❌ | ❌ |
-| Защита от фишинга | ✅ | ❌ | ❌ |
-| Защита от malware | ✅ | ❌ | ❌ |
-| Блокировка криптоджекинга | ✅ | Частично | ✅ |
-| Блокировка ПНП | ✅ | ❌ | ❌ |
-| Мультиязычность | 5 языков | 40+ | 20+ |
-| Счетчик угроз | ✅ | ❌ | ❌ |
-| Локальная работа | ✅ | ❌ | ✅ |
+| Anti-Phishing | ✅ | ❌ | ❌ |
+| Anti-Malware | ✅ | ❌ | ❌ |
+| Anti-Cryptojacking| ✅ | Partially | ✅ |
+| PUP Blocking | ✅ | ❌ | ❌ |
+| Multilingual | 5 languages | 40+ | 20+ |
+| Threat Counter | ✅ | ❌ | ❌ |
+| Local Operation | ✅ | ✅ | ✅ |
 
-## �🛠️ Разработка
+## 👨‍💻 Development
 
-### Требования
+### Requirements
 
-- Google Chrome 88+ (или Chromium-based браузер)
-- Базовые знания JavaScript ES6+, HTML5, CSS3
-- Понимание Chrome Extension Manifest V3
+- Google Chrome 88+ (or Chromium-based browser)
+- Basic knowledge of JavaScript ES6+, HTML5, CSS3
+- Understanding of Chrome Extension Manifest V3
 
-### Модификация
+### Modification
 
-Вы можете настроить расширение под свои нужды:
+You can easily configure the extension for your needs:
 
-1. **Добавить новые рекламные домены** - отредактируйте массив `adDomains` в `background.js`
-2. **Добавить новые селекторы** - дополните массивы `adSelectors` в `content.js` или `youtube.js`
-3. **Изменить интерфейс** - отредактируйте `popup.html` и `popup.css`
+1. **Add domains to block** - edit the dDomains array in ackground.js
+2. **Add CSS selectors** - edit the dSelectors array in content.js or youtube.js
+3. **Change interface** - edit popup.html and popup.css
 
-### Отладка
+### Debugging
 
-1. Откройте `chrome://extensions/`
-2. Найдите Waveguard AdBlocker
-3. Нажмите "Подробнее" → "Проверить представления: service worker"
-4. Используйте Console для отладки
+1. Open chrome://extensions/
+2. Find Waveguard AdBlocker
+3. Click "Details" -> "Inspect views: service worker"
+4. Use Console for debugging
 
-## 📝 Примечания
+## 📌 Notes
 
-- Расширение использует Manifest V3 (последняя версия для Chrome)
-- Работает локально, не отправляет данные на внешние серверы
-- Не требует создания аккаунта или регистрации
-- Полностью бесплатное и open-source
+- The extension uses Manifest V3 (the latest standard for Chrome)
+- Works completely locally, does not send data to external servers
+- Does not require creating an account or registration
+- Completely free and open-source
 
-## ⚠️ Ограничения
+## ⚠️ Limitations
 
-- Некоторые сайты могут обнаруживать блокировщики рекламы
-- YouTube может изменить структуру страницы, что потребует обновления селекторов
-- Работает только в браузерах на основе Chromium (Chrome, Edge, Opera и др.)
+- Some sites can detect ad blockers
+- YouTube may periodically update the page layout, which will require updating the selectors
+- Works only in Chromium-based browsers (Chrome, Edge, Opera, etc.)
 
-## 🔐 Конфиденциальность
+## 🛡️ Privacy
 
-Расширение:
-- ✅ Не собирает личные данные
-- ✅ Не отслеживает активность пользователя
-- ✅ Работает полностью локально
-- ✅ Не требует доступа к аккаунту
+The extension:
+- ❌ Does not collect personal data
+- ❌ Does not track user activity
+- ✅ Works completely locally
+- ✅ Does not require access to accounts
 
-## 📄 Лицензия
+## 📄 License
 
-MIT License - свободно используйте и модифицируйте код.
+MIT License - free to use and modify the code.
 
-## 🤝 Вклад в проект
+## 🤝 Contribution to the project
 
-Приветствуются pull request'ы с улучшениями:
-- Новые рекламные домены для блокировки
-- Улучшенные селекторы
-- Исправления багов
-- Улучшения интерфейса
+Pull requests with improvements are welcome:
+- New ad domains to block
+- Better selectors
+- Bug fixes
+- Interface improvements
 
-## 🐛 Известные проблемы
+## 🐛 Known Issues
 
-- На некоторых сайтах реклама может загружаться динамически с задержкой
-- YouTube может периодически менять структуру рекламных элементов
+- On some sites, ads can load dynamically and bypass
+- YouTube may periodically change the selectors of ad elements
 
-## 📞 Поддержка
+## 📞 Support
 
-Если вы нашли баг или у вас есть предложение, создайте Issue в репозитории.
+If you find a bug or have a suggestion, create an Issue in the repository.
 
 ---
 
-**Сделано с ❤️ для свободного интернета без рекламы**
+**Made with ❤️ for a free Internet without ads**

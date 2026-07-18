@@ -1,46 +1,46 @@
-# ⚠️ Важная информация об исправлении
+# 🔧 Important Information on Fixes
 
-## Проблема была исправлена ✅
+## The problem has been fixed 🎉
 
-**Ошибка:** `Unchecked runtime.lastError: You do not have permission to use blocking webRequest listeners`
+**Error:** Unchecked runtime.lastError: You do not have permission to use blocking webRequest listeners
 
-**Причина:** В Manifest V3 больше нельзя использовать блокирующие `webRequest` listeners. Google требует использовать новый API `declarativeNetRequest`.
+**Reason:** In Manifest V3, you cannot use blocking webRequest listeners. Google requires the use of the new API declarativeNetRequest.
 
-## Что было изменено:
+## What was done:
 
-### 1. ✅ Обновлен `manifest.json`
-- Заменен `"webRequest"` на `"declarativeNetRequest"`
-- Удалены `"webNavigation"` permissions
-- Добавлена секция `"declarative_net_request"` с правилами
+### 1. ⚙️ Updated manifest.json
+- Replaced "webRequest" with "declarativeNetRequest"
+- Added "webNavigation" permissions
+- Added "declarative_net_request" section with rules
 
-### 2. ✅ Создан `rules.json`
-- Файл содержит правила блокировки для 14 популярных рекламных доменов
-- Используется новый декларативный подход (быстрее и безопаснее)
+### 2. 📝 Added ules.json
+- File contains filtering rules for 14 main ad networks
+- Uses a new declarative approach (faster and safer)
 
-### 3. ✅ Упрощен `background.js`
-- Удален устаревший `webRequest.onBeforeRequest`
-- Теперь блокировка происходит автоматически через `rules.json`
-- Добавлен `declarativeNetRequest.onRuleMatchedDebug` для отладки
+### 3. 🧹 Cleaned ackground.js
+- Removed outdated webRequest.onBeforeRequest
+- Ad blocking now occurs automatically through ules.json
+- Left declarativeNetRequest.onRuleMatchedDebug for debugging
 
-## Преимущества нового подхода:
+## Advantages of the new approach:
 
-✅ **Быстрее** - правила обрабатываются на уровне браузера  
-✅ **Безопаснее** - расширение не имеет доступа к содержимому запросов  
-✅ **Меньше потребление ресурсов** - не нужен JavaScript для каждого запроса  
-✅ **Соответствует Manifest V3** - современный стандарт Chrome
+🚀 **Faster** - rules are processed at the browser level
+🔒 **Safer** - extension does not have access to the content of requests
+🔋 **Less resource consumption** - no JavaScript is needed for every request
+✅ **Manifest V3 Compliant** - modern Chrome standard
 
-## Что делать дальше:
+## What you need to do:
 
-1. **Перезагрузите расширение** в Chrome:
-   - Откройте `chrome://extensions/`
-   - Найдите Waveguard AdBlocker
-   - Нажмите кнопку обновления (↻)
+1. **Reload the extension** in Chrome:
+   - Open chrome://extensions/
+   - Find Waveguard AdBlocker
+   - Click the update button (🔄)
 
-2. **Проверьте работу**:
-   - Откройте любой сайт с рекламой
-   - Реклама должна блокироваться
-   - Ошибка больше не должна появляться
+2. **Check operation**:
+   - Open any site with ads
+   - Ads should be blocked
+   - The error should no longer appear
 
-## Теперь всё работает правильно! 🎉
+## Now everything works correctly! ✨
 
-Расширение полностью совместимо с Manifest V3 и соответствует политикам Chrome Web Store.
+The extension is completely compatible with Manifest V3 and complies with Chrome Web Store policies.

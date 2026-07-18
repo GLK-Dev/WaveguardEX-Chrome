@@ -1,314 +1,314 @@
-# 🛡️ Waveguard Security - Документация по безопасности
+# 🛡️ Waveguard Security - Security Documentation
 
-## Обзор
+## Introduction
 
-Waveguard v4.0.0 включает комплексную систему защиты от онлайн-угроз, предоставляя дополнительный уровень безопасности при работе в интернете.
+Waveguard v4.0.0 includes a comprehensive threat protection system, providing an additional layer of security when working on the Internet.
 
-## 🔐 Функции безопасности
+## 🛡️ Security Features
 
-### 1. Защита от фишинга (Phishing Protection)
+### 1. Phishing Protection
 
-**Что это?**  
-Фишинг - это мошеннические сайты, которые выглядят как легитимные (банки, PayPal, Google и т.д.) и пытаются украсть ваши логины, пароли и личные данные.
+**What is it?**  
+Phishing - these are fraudulent sites that look like real ones (banks, PayPal, Google, etc.) and steal your data, passwords, and card numbers.
 
-**Как работает:**
-- Проверка URL в реальном времени по черному списку известных фишинговых доменов
-- Обнаружение подозрительных паттернов в адресах (например: `paypal-secure.net`, `google-accounts-verify.com`)
-- Показывает красное предупреждение при попытке открыть фишинговый сайт
-- Возможность вернуться назад или продолжить на свой риск
+**How it works:**
+- Real-time URL checking against a local list of known phishing domains
+- Detection of suspicious subdomains and domains (e.g., paypal-secure.net, google-accounts-verify.com)
+- Shows a full-screen red warning when attempting to open a phishing site
+- Allows returning back or continuing at your own risk
 
-**Примеры заблокированных доменов:**
-- `*.phishing-site.com`
-- `*.fake-bank.com`
-- `*.secure-login-verify.com`
-- `*.account-verification.net`
+**Examples of blocked domains:**
+- *.phishing-site.com
+- *.fake-bank.com
+- *.secure-login-verify.com
+- *.account-verification.net
 
-### 2. Защита от вредоносных сайтов (Malware Protection)
+### 2. Malware Protection
 
-**Что это?**  
-Вредоносные сайты распространяют вирусы, трояны и другое опасное ПО, которое может заразить ваш компьютер.
+**What is it?**  
+Malicious sites distribute malware, trojans, and other dangerous software that can infect your computer.
 
-**Как работает:**
-- Блокировка известных доменов, распространяющих malware
-- Предотвращение drive-by downloads (автоматические загрузки)
-- Обнаружение эксплойт-китов
+**How it works:**
+- Blocking known domains distributing malware
+- Preventing drive-by downloads (automatic downloads)
+- Detecting exploit kits
 
-**Защита включает:**
-- Блокировка malware-хостов
-- Проверка подозрительных загрузок
-- Предупреждение о потенциально опасном содержимом
+**What is included:**
+- Blocking malware hosts
+- Checking suspicious downloads
+- Warning about potentially dangerous content
 
-### 3. Защита от криптоджекинга (Cryptojacking Protection)
+### 3. Cryptojacking Protection
 
-**Что это?**  
-Криптоджекинг - это скрытый майнинг криптовалют на вашем компьютере без вашего согласия. Замедляет систему и увеличивает энергопотребление.
+**What is it?**  
+Cryptojacking - this is hidden cryptocurrency mining on your computer without your consent. It slows down the system and increases power consumption.
 
-**Как работает:**
-- Блокировка известных майнинг-скриптов (CoinHive, JSEcoin, CryptoLoot и др.)
-- Перехват создания Web Workers (используются для майнинга)
-- Блокировка запросов к майнинг-пулам
+**How it works:**
+- Blocking known cryptojacking scripts (CoinHive, JSEcoin, CryptoLoot, etc.)
+- Intercepting the creation of Web Workers (used for mining)
+- Blocking requests to mining pools
 
-**Заблокированные майнинг-сервисы:**
-```
-✅ coinhive.com
-✅ coin-hive.com
-✅ jsecoin.com
-✅ crypto-loot.com
-✅ cryptoloot.pro
-✅ webminepool.com
-✅ monerominer.rocks
-✅ minero.cc
-✅ И многие другие...
-```
+**Blocked mining services:**
+`
+❌ coinhive.com
+❌ coin-hive.com
+❌ jsecoin.com
+❌ crypto-loot.com
+❌ cryptoloot.pro
+❌ webminepool.com
+❌ monerominer.rocks
+❌ minero.cc
+❌ and many others...
+`
 
-### 4. Защита от ПНП (Potentially Unwanted Programs)
+### 4. PUP (Potentially Unwanted Programs) Protection
 
-**Что это?**  
-ПНП - это потенциально нежелательное программное обеспечение: toolbars, adware, fake optimizers, которые устанавливаются без вашего согласия.
+**What is it?**  
+PUP - these are potentially unwanted programs installed without your consent: toolbars, adware, fake optimizers, driver updaters.
 
-**Как работает:**
-- Блокировка доменов, распространяющих ПНП
-- Предупреждение при попытке загрузить подозрительные .exe/.msi файлы
-- Обнаружение загрузок с ключевыми словами: "setup", "installer", "toolbar", "optimizer"
+**How it works:**
+- Blocking domains distributing PUPs
+- Warning when attempting to download suspicious .exe/.msi files
+- Detecting downloads with keywords: "setup", "installer", "toolbar", "optimizer"
 
-**Блокируемые типы файлов:**
-- `.exe`, `.msi` - установщики Windows
-- `.bat`, `.cmd` - командные файлы
-- `.scr` - скринсейверы (часто используются для malware)
-- `.vbs`, `.js` - скрипты
+**Tracked file types:**
+- .exe, .msi - Windows installers
+- .bat, .cmd - Command files
+- .scr - Screensavers (often used for malware)
+- .vbs, .js - Scripts
 
-**Подозрительные ключевые слова:**
+**Suspicious keywords:**
 - download-manager
 - toolbar-installer
 - pc-cleaner
 - system-optimizer
 - driver-update
 
-### 5. Защита от агрессивных всплывающих окон
+### 5. Aggressive Pop-up Protection
 
-**Как работает:**
-- Ограничение количества всплывающих окон (максимум 2 за 5 секунд)
-- Автоматическая блокировка при превышении лимита
-- Перехват `window.open()` для предотвращения pop-up атак
+**How it works:**
+- Limiting the number of pop-ups (maximum 2 per 5 seconds)
+- Automatic blocking if the limit is exceeded
+- Intercepting window.open() to prevent pop-up attacks
 
-### 6. Защита от clickjacking
+### 6. Anti-Clickjacking Protection
 
-**Что это?**  
-Clickjacking - это когда ваш клик перехватывается невидимым iframe, и вы непреднамеренно нажимаете на что-то другое.
+**What is it?**  
+Clickjacking - this is an attack where an attacker overlays a transparent iframe, and you interact with an invisible element instead of the main page.
 
-**Как работает:**
-- Обнаружение загрузки страницы в подозрительных iframe
-- Предупреждение при попытке clickjacking
-- Возможность открыть страницу в новой вкладке
+**How it works:**
+- Detecting page loading in an invisible iframe
+- Warning on clickjacking attempt
+- Blocking the main page to prevent clicking
 
-### 7. Мониторинг подозрительной активности
+### 7. Suspicious Activity Monitoring
 
-**Отслеживает:**
-- Множественные редиректы (признак malware)
-- Автоматические загрузки файлов без действий пользователя
-- Подозрительные изменения в DOM
+**Tracked:**
+- Infinite redirects (malware sign)
+- Automatic file downloads without user action
+- Suspicious DOM manipulations
 
-## 📊 Статистика
+## 📊 Statistics
 
-Счетчик **"🛡️ Угроз"** в интерфейсе показывает количество заблокированных угроз:
-- Фишинговые сайты
-- Вредоносные домены
-- Попытки криптоджекинга
-- Загрузки ПНП
-- Агрессивные pop-ups
+The **"🛡️ Threats"** counter in the interface shows the number of blocked threats:
+- Phishing sites
+- Malicious domains
+- Cryptojacking attempts
+- PUP downloads
+- Aggressive pop-ups
 
-## ⚙️ Настройки
+## ⚙️ Settings
 
-### Включение/выключение защиты
+### Enabling/Disabling Protection
 
-1. Кликните на иконку Waveguard в панели инструментов
-2. Откройте **"⚙️ Дополнительные настройки"**
-3. Переключите **"🛡️ Защита от фишинга/вредоносов"**
+1. Click on the Waveguard icon in the toolbar
+2. Open **"⚙️ Advanced settings"**
+3. Toggle **"🛡️ Anti-Phishing/Malware protection"**
 
-### Рекомендуемые настройки
+### Controlled Settings
 
-Для максимальной защиты включите все опции:
-- ✅ Блокировка рекламы на сайтах
-- ✅ Блокировка рекламы на YouTube
-- ✅ Блокировка рекламы на TikTok
-- ✅ Блокировка рекламы на Facebook/Meta
-- ✅ Строгий режим
-- ✅ Защита от трекинга
-- ✅ Блокировка аналитики
-- ✅ **Защита от фишинга/вредоносов** ← НОВОЕ
+For maximum protection, ensure the following are enabled:
+- ✅ Ad blocking on sites
+- ✅ Ad blocking on YouTube
+- ✅ Ad blocking on TikTok
+- ✅ Ad blocking on Facebook/Meta
+- ✅ Strict mode
+- ✅ Anti-tracking
+- ✅ Analytics blocking
+- ✅ **Anti-Phishing/Malware protection** ⬅️ Important
 
-## 🚨 Предупреждения
+## 🛑 Warnings
 
-### Красное предупреждение
+### Full-Screen Warning
 
-Когда Waveguard обнаруживает угрозу, появляется полноэкранное предупреждение:
+When Waveguard detects a threat, a full-screen warning appears:
 
-```
+`
 ┌─────────────────────────────────┐
-│         ⚠️ ОПАСНОСТЬ!           │
+│         ⚠️ WARNING!           │
 │                                 │
-│  Обнаружена попытка фишинговой │
-│  атаки! Этот сайт может украсть│
-│  ваши данные.                   │
+│  Phishing attempt detected!     │
+│  This site may steal            │
+│  your data.                     │
 │                                 │
-│  🔙 Вернуться назад             │
-│  ⚠️ Продолжить на свой риск     │
+│  [Go Back]                      │
+│  [Continue at my own risk]      │
 └─────────────────────────────────┘
-```
+`
 
-**Кнопки:**
-- **Вернуться назад** - безопасный выбор, возвращает на предыдущую страницу
-- **Продолжить на свой риск** - закрывает предупреждение, если вы уверены
+**Buttons:**
+- **Go Back** - safe choice, returns to the previous page
+- **Continue at my own risk** - hides the warning if you are sure
 
-### Диалоговое окно подтверждения
+### Suspicious Download Warning
 
-При попытке загрузить ПНП появляется подтверждение:
+Upon a suspicious download attempt, a notification appears:
 
-```
+`
 ⚠️ Waveguard Security: 
-Обнаружена попытка загрузки потенциально 
-нежелательной программы!
+Potentially unwanted program 
+download attempt detected!
 
-Файл: download.exe
+File: download.exe
 
-Вы уверены, что хотите продолжить?
-```
+Are you sure you want to continue?
+`
 
-## 🔒 Конфиденциальность
+## 🔒 Privacy
 
-**Важно:** Вся проверка безопасности происходит **локально** на вашем устройстве.
+**Important:** All security checks occur **locally** on your device.
 
-- ✅ Не отправляет данные на внешние серверы
-- ✅ Не собирает статистику просмотров
-- ✅ Не передает URL сторонним сервисам
-- ✅ Полностью офлайн после первой загрузки
+- ✅ Does not send data to external servers
+- ✅ Does not collect browsing history
+- ✅ Does not relay URLs to third-party services
+- ✅ Works offline after the first download
 
-База данных угроз (`malicious-domains.json`) хранится локально в расширении.
+The threat database (malicious-domains.json) is stored locally in the extension.
 
-## 📝 База данных угроз
+## 🗄️ Threat Database
 
-### Категории
+### Categories
 
-1. **Phishing** - 9+ доменов
-2. **Malware** - 5+ доменов
-3. **Cryptojacking** - 18+ скриптов
-4. **PUP Domains** - 8+ доменов
-5. **Suspicious TLDs** - 5 доменных зон
-6. **Scam Keywords** - 10+ ключевых слов
+1. **Phishing** - 9+ patterns
+2. **Malware** - 5+ patterns
+3. **Cryptojacking** - 18+ domains
+4. **PUP Domains** - 8+ patterns
+5. **Suspicious TLDs** - 5 domain zones
+6. **Scam Keywords** - 10+ keywords
 
-### Обновление базы
+### Database Update
 
-База угроз обновляется вместе с расширением. Планируется добавление автоматического обновления в будущих версиях.
+The threat database is updated along with the extension. Automatic updating is planned in future versions.
 
-## 🆚 Сравнение с другими решениями
+## 🆚 Comparison with other solutions
 
-| Функция | Waveguard Security | Chrome Safe Browsing | Malwarebytes BG |
+| Feature | Waveguard Security | Chrome Safe Browsing | Malwarebytes BG |
 |---------|-------------------|---------------------|-----------------|
-| Блокировка рекламы | ✅ | ❌ | ✅ |
-| Защита от фишинга | ✅ | ✅ | ✅ |
-| Блокировка malware | ✅ | ✅ | ✅ |
-| Защита от криптоджекинга | ✅ | ❌ | ✅ |
-| Блокировка ПНП | ✅ | ❌ | ✅ |
-| Защита от pop-ups | ✅ | Частично | ✅ |
-| Локальная работа | ✅ | ❌ (облако) | Частично |
-| Мультиплатформа | YouTube, TikTok, FB | N/A | Все сайты |
+| Ad Blocking | ✅ | ❌ | ❌ |
+| Phishing Protection | ✅ | ✅ | ✅ |
+| Malware Blocking | ✅ | ✅ | ✅ |
+| Cryptojacking Protection | ✅ | ❌ | ✅ |
+| PUP Blocking | ✅ | ❌ | ✅ |
+| Pop-up Protection | ✅ | Partially | ❌ |
+| Local Operation | ✅ | ✅ (Hashes) | Partially |
+| Platform-specific | YouTube, TikTok, FB | N/A | All sites |
 
-## 🐛 Что делать при ложных срабатываниях
+## 🛠️ How to report a false positive
 
-Если Waveguard заблокировал безопасный сайт:
+If Waveguard blocked an incorrect site:
 
-1. Нажмите **"Продолжить на свой риск"**
-2. Сообщите об ошибке: [GitHub Issues](https://github.com/glkdev/Waveguard/issues)
-3. Временно отключите защиту для конкретного сайта (в настройках)
+1. Click **"Continue at my own risk"**
+2. Create an Issue: [GitHub Issues](https://github.com/glkdev/Waveguard/issues)
+3. Temporarily disable protection for this site (in settings)
 
-## 🔄 Взаимодействие с другими функциями
+## 🧩 Interaction with other features
 
-Waveguard Security работает **вместе** с другими функциями:
+Waveguard Security works **together** with other features:
 
-```
+`
 ┌──────────────────────────────┐
 │   Content Scripts Layer      │
 ├──────────────────────────────┤
-│ 1. Security.js (первый)      │ ← Проверка URL
-│ 2. Content.js (ads)          │ ← Блокировка рекламы
-│ 3. YouTube.js/TikTok.js/FB   │ ← Специфичная блокировка
+│ 1. Security.js (Core)      │ ⬅️ URL checking
+│ 2. Content.js (ads)          │ ⬅️ Ad blocking
+│ 3. YouTube.js/TikTok.js/FB   │ ⬅️ Specific blocking
 └──────────────────────────────┘
-         ↓
+         ⬇
 ┌──────────────────────────────┐
 │   Background Service Worker  │
 ├──────────────────────────────┤
-│ • Declarative NetRequest     │
-│ • Статистика (ads + threats) │
-│ • Настройки                  │
+│ 🔸 Declarative NetRequest     │
+│ 🔸 Statistics (ads + threats) │
+│ 🔸 Settings                  │
 └──────────────────────────────┘
-         ↓
+         ⬇
 ┌──────────────────────────────┐
 │   Network Level              │
 ├──────────────────────────────┤
-│ • rules.json (55 правил)     │
-│ • Блокировка на уровне сети  │
+│ 🔸 rules.json (55 rules)     │
+│ 🔸 Request level blocking  │
 └──────────────────────────────┘
-```
+`
 
-## 📖 Технические детали
+## 💻 Technical Details
 
-### Архитектура
+### Architecture
 
-- **Язык:** JavaScript (ES6+)
+- **Language:** JavaScript (ES6+)
 - **API:** Chrome Extension Manifest V3
-- **Паттерн:** Observer + Factory
-- **Хранилище:** chrome.storage.local (быстрое)
+- **Patterns:** Observer + Factory
+- **Storage:** chrome.storage.local (fast)
 
-### Производительность
+### Performance
 
-- Проверка URL: **< 1ms**
-- Загрузка базы угроз: **< 50ms**
-- Влияние на скорость страницы: **минимальное**
-- Потребление памяти: **< 5MB**
+- URL checking: **< 1ms**
+- Threat database loading: **< 50ms**
+- Impact on page speed: **Minimal**
+- Memory consumption: **< 5MB**
 
-### Совместимость
+### Compatibility
 
 - ✅ Chrome 88+
 - ✅ Edge 88+
 - ✅ Brave 1.20+
 - ✅ Opera 74+
-- ❌ Firefox (планируется в v4.1)
+- ⏳ Firefox (support in v4.1)
 
-## 🚀 Будущие улучшения
+## 🚀 Future Plans
 
-Запланировано в версии 4.1:
+Planned in version 4.1:
 
-- [ ] Автообновление базы угроз
-- [ ] Интеграция с Google Safe Browsing API
-- [ ] Белый список доменов
-- [ ] Экспорт/импорт настроек
-- [ ] Расширенная статистика угроз по типам
-- [ ] Уведомления об обнаруженных угрозах
+- [ ] Automatic threat database updates
+- [ ] Integration with Google Safe Browsing API
+- [ ] White list of domains
+- [ ] Export/import settings
+- [ ] Detailed threat statistics by type
+- [ ] Notifications about detected threats
 
 ## ❓ FAQ
 
-**Q: Заменяет ли Waveguard антивирус?**  
-A: Нет. Waveguard предоставляет дополнительный уровень защиты в браузере, но не заменяет полноценный антивирус.
+**Q: Does Waveguard replace an antivirus?**  
+A: No. Waveguard provides an additional layer of protection in the browser, but it does not replace a full-fledged antivirus.
 
-**Q: Замедляет ли это работу браузера?**  
-A: Нет. Проверка происходит локально и занимает миллисекунды.
+**Q: Does it slow down the browser?**  
+A: No. Checks occur locally in fractions of a millisecond.
 
-**Q: Можно ли отключить только защиту, оставив блокировку рекламы?**  
-A: Да. В дополнительных настройках есть отдельный переключатель.
+**Q: Can I disable only security, leaving ad blocking?**  
+A: Yes. In the advanced settings, there is a separate switch.
 
-**Q: Как часто обновляется база угроз?**  
-A: Сейчас - с каждой версией расширения. Автообновление планируется в v4.1.
+**Q: How often is the threat database updated?**  
+A: Currently - with each version of the extension. Auto-updates are planned in v4.1.
 
-**Q: Безопасны ли мои данные?**  
-A: Да. Расширение не собирает и не отправляет никакие данные. Вся работа происходит локально.
+**Q: Is it privacy-safe?**  
+A: Yes. The extension does not collect or send your data. All work occurs locally.
 
-## 📞 Поддержка
+## 📞 Contacts
 
 - **GitHub:** https://github.com/glkdev
 - **Issues:** https://github.com/glkdev/Waveguard/issues
-- **Автор:** GLK Dev
+- **Author:** GLK Dev
 
 ---
 
 **Waveguard v4.0.0 Security Edition** 🛡️  
-*Защищая вас там, где вы проводите большую часть времени - в интернете.*
+*Security for where we spend the most time - the Internet.*

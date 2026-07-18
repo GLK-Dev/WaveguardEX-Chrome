@@ -1,67 +1,65 @@
-# Быстрая установка Waveguard AdBlocker
+# Waveguard AdBlocker Installation Guide
 
-## Шаг 1: Подготовка иконок (опционально)
+## Step 1: Preparing Icons (Optional)
 
-Иконки не обязательны для работы расширения, но для полноты установки:
+Icons are not required for the extension to work, but if you want to install them:
 
-1. Откройте `icons/generate-icons.html` в браузере Chrome
-2. Нажмите кнопки "Скачать 16x16", "Скачать 48x48", "Скачать 128x128"
-3. Сохраните скачанные файлы в папку `icons/`
+1. Open icons/generate-icons.html in your Chrome browser
+2. Click the buttons "Generate 16x16", "Generate 48x48", "Generate 128x128"
+3. Save the downloaded files to the icons/ folder
 
-**ИЛИ** просто создайте 3 простые PNG картинки любого содержания с именами:
-- `icon16.png`
-- `icon48.png`
-- `icon128.png`
+**OR** just create 3 blank PNG images with any content and name them:
+- icon16.png
+- icon48.png
+- icon128.png
 
-## Шаг 2: Установка в Chrome
+## Step 2: Installation in Chrome
 
-1. Откройте Chrome
-2. Перейдите на страницу: `chrome://extensions/`
-3. Включите **"Режим разработчика"** (переключатель в правом верхнем углу)
-4. Нажмите кнопку **"Загрузить распакованное расширение"**
-5. Выберите папку `G:\VSCode projects\Waveguard`
-6. Готово! Расширение установлено
+1. Open Chrome
+2. Go to the page: chrome://extensions/
+3. Enable **"Developer mode"** (toggle in the top right corner)
+4. Click the **"Load unpacked"** button
+5. Select the folder E:\VSCode projects\Waveguard\WaveguardEX-Chrome
+6. Done! The extension is installed
 
-## Шаг 3: Проверка работы
+## Step 3: Checking Operation
 
-1. Найдите иконку расширения в панели инструментов Chrome (справа от адресной строки)
-2. Кликните по иконке - откроется панель управления
-3. Убедитесь, что оба переключателя включены (синие)
-4. Откройте YouTube и попробуйте посмотреть видео с рекламой
+1. Find the extension icon in the Chrome toolbar (top right)
+2. Click on the icon - the control panel will open
+3. Ensure all switches are enabled (blue)
+4. Open YouTube and try watching a video with ads
 
-## Возможные проблемы
+## Troubleshooting
 
-### Ошибка "Manifest file is missing or unreadable"
-- Убедитесь, что выбрали правильную папку с файлом `manifest.json`
+### Error "Manifest file is missing or unreadable"
+- Make sure you selected the correct folder with the manifest.json file
 
-### Ошибка с иконками
-- Если нет PNG иконок, временно удалите строки с иконками из `manifest.json`:
-```json
+### Error with icons
+- If there are no PNG icons, temporarily delete the block with icons from manifest.json:
 "icons": {
   "16": "icons/icon16.png",
   "48": "icons/icon48.png",
   "128": "icons/icon128.png"
 },
-```
 
-### Расширение не блокирует рекламу
-- Проверьте, включены ли переключатели в popup окне
-- Перезагрузите страницу после установки расширения
-- Проверьте консоль разработчика (F12) на наличие ошибок
+### The extension is not blocking ads
+- Check if the switches are enabled in the popup menu
+- Reload the page after installing the extension
+- Check the developer console (F12) for errors
 
-## Обновление расширения
+## Updating the Extension
 
-После изменения кода:
-1. Перейдите на `chrome://extensions/`
-2. Нажмите кнопку обновления (круговая стрелка) под расширением Waveguard
-3. Перезагрузите открытые вкладки
+After changing the code:
+1. Go to chrome://extensions/
+2. Click the update button (circular arrow) for the Waveguard extension
+3. Reload open tabs
 
-## Удаление
+## Removal
 
-1. Перейдите на `chrome://extensions/`
-2. Найдите Waveguard AdBlocker
-3. Нажмите "Удалить"
+1. Go to chrome://extensions/
+2. Find Waveguard AdBlocker
+3. Click "Remove"
 
 ---
 
-**Важно**: Это расширение для личного использования. Некоторые сайты могут не работать корректно с включенным блокировщиком рекламы.
+**Note**: This extension is for personal use. Complex sites might not work correctly with ad blockers enabled.

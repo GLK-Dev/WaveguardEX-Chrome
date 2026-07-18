@@ -1,28 +1,28 @@
-# Генерация иконок
+# Extension Icons
 
-Для создания иконок расширения:
+To create icons for the extension:
 
-## Вариант 1: Автоматическая генерация
+## Option 1: Automatic generation
 
-1. Откройте файл `icons/generate-icons.html` в браузере
-2. Нажмите кнопки для скачивания иконок разных размеров
-3. Сохраните файлы как `icon16.png`, `icon48.png`, `icon128.png` в папку `icons/`
+1. Open the file icons/generate-icons.html in your browser
+2. Click the buttons to download icons of different sizes
+3. Save the files as icon16.png, icon48.png, icon128.png in the icons/ folder
 
-## Вариант 2: Использование SVG
+## Option 2: Using SVG
 
-SVG файл находится в `icons/icon.svg`. Вы можете:
-- Открыть его в браузере и сделать скриншот
-- Использовать онлайн-конвертер SVG → PNG (например, https://cloudconvert.com/svg-to-png)
-- Использовать Inkscape или другой векторный редактор
+The SVG file is located at icons/icon.svg. You can:
+- Open it in a browser and take a screenshot
+- Use an online SVG to PNG converter (e.g., https://cloudconvert.com/svg-to-png)
+- Use Inkscape or another graphic editor
 
-## Вариант 3: Создание в Photoshop/GIMP
+## Option 3: Creating in Photoshop/GIMP
 
-1. Создайте новое изображение размером 128x128px
-2. Залейте градиентом от #667eea до #764ba2
-3. Добавьте белый щит и символ блокировки (круг с диагональной линией)
-4. Сохраните в трех размерах: 16x16, 48x48, 128x128
+1. Create a new image of 128x128px
+2. Fill with gradient from #667eea to #764ba2
+3. Add a white shield with a blocking symbol (like in the original icon)
+4. Save in three sizes: 16x16, 48x48, 128x128
 
-## Временное решение
+## Temporary solution
 
-До создания полноценных иконок расширение будет работать с дефолтными иконками Chrome.
-Функциональность расширения от этого не пострадает.
+Until the final icons are created, the extension will work with default Chrome icons.
+The functionality of the extension will not suffer from this.

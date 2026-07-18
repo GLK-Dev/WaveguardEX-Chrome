@@ -1,174 +1,174 @@
-# 🛡️ Waveguard v4.0.0 - Security Edition Release Notes
+# 🎉 Waveguard v4.0.0 - Security Edition Release Notes
 
-## 🎉 Что нового
+## 🚀 What's New
 
-Waveguard получил **ОГРОМНОЕ обновление безопасности**! Теперь это не просто блокировщик рекламы, а комплексная система защиты от онлайн-угроз.
+Waveguard has received a **MASSIVE security update**! Now it's not just an ad blocker, but a comprehensive cyber threat protection system.
 
 ---
 
-## ✨ Новые функции безопасности
+## 🛡️ New Security Features
 
-### 1. 🎣 Защита от фишинга (Phishing Protection)
-**Проблема:** Мошеннические сайты выглядят как настоящие банки, PayPal, Google и крадут ваши данные.
+### 1. 🎣 Phishing Protection
+**Problem:** Fraudulent sites look like real banks, PayPal, Google and steal your data.
 
-**Решение:**
-- ✅ Проверка URL в реальном времени
-- ✅ База из 9+ известных фишинговых паттернов
-- ✅ Полноэкранное красное предупреждение
-- ✅ Возможность вернуться или продолжить на свой риск
+**Solution:**
+- ✅ Real-time URL checking
+- ✅ Database of 9+ known phishing patterns
+- ✅ Full-screen red warning
+- ✅ Ability to go back or continue at your own risk
 
-**Пример заблокированных доменов:**
-```
+**Examples of blocked domains:**
+
 ❌ paypal-secure.net
 ❌ google-accounts-verify.com
 ❌ apple-support-secure.com
 ❌ microsoft-security-check.com
-```
 
-### 2. ☠️ Защита от вредоносных сайтов (Malware Protection)
-**Проблема:** Сайты с вирусами, троянами и опасным ПО.
 
-**Решение:**
-- ✅ Блокировка malware-хостов
-- ✅ Предотвращение drive-by downloads
-- ✅ Обнаружение эксплойт-китов
-- ✅ Предупреждение перед открытием
+### 2. ☠️ Malware Protection
+**Problem:** Sites with viruses, trojans and dangerous software.
 
-### 3. ⛏️ Защита от криптоджекинга (Cryptojacking Protection)
-**Проблема:** Скрытый майнинг криптовалют замедляет компьютер и жрёт электричество.
+**Solution:**
+- ✅ Blocking malware hosts
+- ✅ Preventing drive-by downloads
+- ✅ Detecting exploit kits
+- ✅ Warning before opening
 
-**Решение:**
-- ✅ Блокировка 18+ майнинг-скриптов
-- ✅ Перехват Web Workers
-- ✅ Блокировка на уровне сети (rules.json)
+### 3. ⛏️ Cryptojacking Protection
+**Problem:** Hidden cryptocurrency mining slows down the computer and consumes electricity.
 
-**Заблокированные майнеры:**
-```
-✅ CoinHive ⛏️
-✅ JSEcoin ⛏️
-✅ CryptoLoot ⛏️
-✅ WebMinePool ⛏️
-✅ MoneroMiner ⛏️
-✅ + 13 других
-```
+**Solution:**
+- ✅ Blocking 18+ crypto miners
+- ✅ Blocking Web Workers
+- ✅ Blocking at the network level (rules.json)
 
-### 4. ⚠️ Защита от ПНП (PUP Protection)
-**Проблема:** Нежелательные программы (toolbars, adware, fake optimizers) устанавливаются без спроса.
+**Blocked services:**
 
-**Решение:**
-- ✅ Блокировка доменов с ПНП
-- ✅ Предупреждение при скачивании .exe/.msi
-- ✅ Обнаружение подозрительных установщиков
+❌ CoinHive 
+❌ JSEcoin 
+❌ CryptoLoot 
+❌ WebMinePool 
+❌ MoneroMiner 
+❌ + 13 others
 
-**Блокируемые типы:**
-```
+
+### 4. 🕷️ PUP Protection
+**Problem:** Unwanted programs (toolbars, adware, fake optimizers) are installed without your knowledge.
+
+**Solution:**
+- ✅ Blocking domains with PUPs
+- ✅ Warning when downloading .exe/.msi
+- ✅ Detecting suspicious installers
+
+**Tracked types:**
+
 ⚠️ setup.exe, installer.msi
 ⚠️ download-manager, toolbar
 ⚠️ pc-cleaner, optimizer
 ⚠️ driver-update
-```
 
-### 5. 🚫 Агрессивная блокировка pop-ups
-**Проблема:** Сайты спамят десятками всплывающих окон.
 
-**Решение:**
-- ✅ Лимит: максимум 2 pop-up за 5 секунд
-- ✅ Автоблокировка при превышении
-- ✅ Перехват window.open()
+### 5. 🛑 Aggressive pop-up blocking
+**Problem:** Sites spamming tabs with pop-up windows.
 
-### 6. 🔒 Защита от clickjacking
-**Проблема:** Невидимые iframe перехватывают ваши клики.
+**Solution:**
+- ✅ Limit: max 2 pop-ups per 5 seconds
+- ✅ Auto-blocking if exceeded
+- ✅ Intercepting window.open()
 
-**Решение:**
-- ✅ Обнаружение подозрительных iframe
-- ✅ Предупреждение о попытке clickjacking
-- ✅ Возможность открыть в новой вкладке
+### 6. 🖱️ Anti-clickjacking
+**Problem:** Invisible iframe overlays on the main site.
 
-### 7. 👁️ Мониторинг подозрительной активности
-**Отслеживает:**
-- 🔄 Множественные редиректы (признак malware)
-- 📥 Автоматические загрузки без действий пользователя
-- 🔍 Подозрительные изменения в DOM
+**Solution:**
+- ✅ Detecting suspicious iframes
+- ✅ Warning on clickjacking attempt
+- ✅ Blocking clicks on the main page
+
+### 7. 🕵️ Suspicious Activity Monitoring
+**Tracked:**
+- 🔄 Infinite redirects (malware sign)
+- 📥 Automatic file downloads without user action
+- 📝 Suspicious DOM manipulations
 
 ---
 
-## 📊 Новый интерфейс
+## 🎨 New Interface
 
-### Счетчик угроз
-```
+### Threat Counter
+
 ┌──────────────────────────┐
-│ Заблокировано: 142       │
-│ 🛡️ Угроз: 7              │
+│ Blocked: 142       │
+│ 🛡️ Threats: 7              │
 └──────────────────────────┘
-```
 
-### Новый переключатель
-```
-🛡️ Защита от фишинга/вредоносов
-[✓] Включено
-```
 
-### Обновленная версия
-```
+### Advanced Settings
+
+🛡️ Anti-Phishing/Malware protection
+[✓] Enabled
+
+
+### Updated Title
+
 Waveguard v4.0.0 🛡️ Security Edition
-```
+
 
 ---
 
-## 📁 Новые файлы
+## 📁 New Files
 
-### 1. `security.js` (450+ строк)
-Главный модуль безопасности:
-- Проверка URL на угрозы
-- Блокировка ПНП загрузок
-- Защита от криптоджекинга
-- Блокировка pop-ups
-- Защита от clickjacking
-- Мониторинг активности
+### 1. security.js (450+ lines)
+Security engine core:
+- URL threat checking
+- Suspicious download blocking
+- Cryptojacking protection
+- Pop-up blocking
+- Anti-clickjacking
+- Activity monitoring
 
-### 2. `malicious-domains.json`
-База данных угроз:
-- 9+ фишинговых паттернов
-- 5+ malware доменов
-- 18+ криптомайнеров
-- 8+ ПНП доменов
-- 5 подозрительных TLD
-- 10+ scam-ключевых слов
+### 2. malicious-domains.json
+Threat database:
+- 9+ phishing patterns
+- 5+ malware domains
+- 18+ crypto miners
+- 8+ PUP domains
+- 5 suspicious TLDs
+- 10+ scam keywords
 
-### 3. `SECURITY.md` (300+ строк)
-Подробная документация:
-- Как работает каждая защита
-- Примеры заблокированных угроз
-- FAQ и troubleshooting
-- Технические детали
-- Сравнение с аналогами
+### 3. SECURITY.md (300+ lines)
+Detailed documentation:
+- How the protection works
+- Examples of blocked threats
+- FAQ and troubleshooting
+- Technical details
+- Comparison with competitors
 
 ---
 
-## 🔧 Технические изменения
+## ⚙️ Technical Changes
 
-### `manifest.json`
-```json
+### manifest.json
+`json
 {
   "version": "4.0.0",
-  "description": "Блокирует рекламу и защищает от фишинга, вредоносных сайтов, криптоджекинга и ПНП",
+  "description": "Blocks ads and protects against phishing, malware, cryptojacking, and PUPs",
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js", "security.js"]  // ← Добавлен security.js
+      "js": ["content.js", "security.js"]  // ⬅️ Added security.js
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["content.css", "malicious-domains.json"]  // ← База угроз
+      "resources": ["content.css", "malicious-domains.json"]  // ⬅️ Threat database
     }
   ]
 }
-```
+`
 
-### `rules.json`
-Добавлено 10 новых правил (46-55) для блокировки криптомайнеров:
-```json
+### ules.json
+Added 10 new rules (46-55) for blocking crypto miners:
+`json
 {
   "id": 46,
   "action": { "type": "block" },
@@ -176,246 +176,246 @@ Waveguard v4.0.0 🛡️ Security Edition
     "urlFilter": "*coinhive.com*"
   }
 }
-// ... +9 правил
-```
+// ... +9 rules
+`
 
-### `background.js`
-Новые возможности:
-- Счетчик заблокированных угроз (`blockedThreatsCount`)
-- Обработка сообщений `threatBlocked`
-- Новая настройка `securityProtection`
+### ackground.js
+New listeners:
+- Threat counter (lockedThreatsCount)
+- Handling 	hreatBlocked message
+- Reading securityProtection setting
 
-### `popup.html/css/js`
-Обновления UI:
-- Счетчик угроз: `<span id="threatsCount">0</span>`
-- Переключатель защиты: `<input id="securityToggle">`
-- Обработчик изменений с перезагрузкой вкладок
+### popup.html/css/js
+UI Updates:
+- Threat counter: <span id="threatsCount">0</span>
+- Protection toggle: <input id="securityToggle">
+- Event listeners for statistics and toggles
 
-### `i18n.js`
-Переводы на 5 языков:
-- `threatsBlocked` - "🛡️ Угроз:"
-- `securityProtection` - "🛡️ Защита от фишинга/вредоносов"
-- Поддержка RU, UK, EN, HE, ES
+### i18n.js
+Translations for 5 languages:
+- 	hreatsBlocked - "🛡️ Threats:"
+- securityProtection - "🛡️ Anti-Phishing/Malware protection"
+- Supports RU, UK, EN, HE, ES
 
 ---
 
-## 📈 Статистика
+## 📊 Statistics
 
-### Размер кода
-```
-Файл               Строки    Размер
+### Code Volume
+
+File               Lines    Size
 ─────────────────────────────────────
 security.js          ~450    ~15 KB
 malicious-domains.json ~70   ~2 KB
 SECURITY.md          ~300    ~12 KB
 rules.json (new)      ~50    ~2 KB
 ─────────────────────────────────────
-Итого (новое):       ~870    ~31 KB
-```
+Total (new):       ~870    ~31 KB
 
-### Производительность
-- ⚡ Проверка URL: **< 1ms**
-- ⚡ Загрузка базы угроз: **< 50ms**
-- ⚡ Влияние на скорость: **минимальное**
-- 💾 Память: **< 5MB дополнительно**
 
----
-
-## 🛡️ Безопасность и конфиденциальность
-
-### Что НЕ делает Waveguard:
-- ❌ Не отправляет данные на серверы
-- ❌ Не собирает историю посещений
-- ❌ Не использует облачные сервисы
-- ❌ Не продает ваши данные
-
-### Что ДЕЛАЕТ Waveguard:
-- ✅ Проверяет URL локально
-- ✅ Хранит базу угроз в расширении
-- ✅ Работает полностью офлайн
-- ✅ Открытый исходный код
+### Performance
+- 🚀 URL checking: **< 1ms**
+- ⚡ Threat DB loading: **< 50ms**
+- 📉 Impact on speed: **Negligible**
+- 💾 Memory: **< 5MB additional**
 
 ---
 
-## 🎯 Кому это нужно?
+## 🔒 Security and Privacy
 
-### Обычным пользователям
-- Защита от фишинговых сайтов при онлайн-шоппинге
-- Блокировка майнинга на пиратских сайтах
-- Предотвращение установки adware/toolbars
+### What Waveguard DOES NOT do:
+- ❌ Does not send data to servers
+- ❌ Does not collect browsing history
+- ❌ Does not use cloud services
+- ❌ Does not share your data
 
-### Продвинутым пользователям
-- Дополнительный слой защиты кроме антивируса
-- Локальная база угроз без облака
-- Прозрачная работа (open source)
+### What Waveguard DOES:
+- ✅ Checks URLs locally
+- ✅ Stores threat database in the extension
+- ✅ Works completely offline
+- ✅ Source code is open
 
-### Разработчикам
-- Пример реализации Content Security Policy
-- Паттерны защиты от веб-угроз
+---
+
+## 👥 Who needs this?
+
+### Regular users
+- Protection from phishing sites and fake shops
+- Ad blocking on all sites
+- Prevention of adware/toolbars installation
+
+### Advanced users
+- Additional security layer besides antivirus
+- Local threat database without tracking
+- Transparent operation (open source)
+
+### Developers
+- Example of Content Security Policy implementation
+- Ready-to-use engine for anti-threats
 - Manifest V3 best practices
 
 ---
 
-## 📚 Документация
+## 📚 Documentation
 
-### Полные гайды:
-- 📖 **SECURITY.md** - Подробная документация по безопасности (300+ строк)
-- 📖 **README.md** - Обновлен с новыми функциями
-- 📖 **INSTALL.md** - Инструкция по установке
-- 📖 **QUICKSTART.md** - Быстрый старт
+### New files:
+- 📖 **SECURITY.md** - Detailed security documentation (300+ lines)
+- 📝 **README.md** - Updated with new features
+- 🚀 **INSTALL.md** - Installation guide
+- ⚡ **QUICKSTART.md** - Quick start guide
 
-### Ключевые разделы SECURITY.md:
-1. Обзор функций безопасности
-2. Подробное описание каждой защиты
-3. Примеры заблокированных угроз
-4. Технические детали реализации
-5. Сравнение с аналогами
-6. FAQ и troubleshooting
-7. Дорожная карта (v4.1+)
-
----
-
-## 🚀 Установка
-
-### Способ 1: Обновление с v3.6.0
-1. Откройте `chrome://extensions/`
-2. Найдите Waveguard AdBlocker
-3. Нажмите **"Обновить"** (↻)
-4. Перезагрузите открытые вкладки
-
-### Способ 2: Новая установка
-1. Скачайте архив с GitHub
-2. Откройте `chrome://extensions/`
-3. Включите **"Режим разработчика"**
-4. **"Загрузить распакованное расширение"**
-5. Выберите папку `Waveguard`
+### Key sections of SECURITY.md:
+1. Overview of security features
+2. Detailed description of each threat
+3. Examples of blocked threats
+4. Technical implementation details
+5. Comparison with competitors
+6. FAQ and troubleshooting
+7. Roadmap (v4.1+)
 
 ---
 
-## ⚙️ Как включить защиту?
+## 📥 Installation
 
-1. Кликните на иконку Waveguard
-2. Откройте **"⚙️ Дополнительные настройки"**
-3. Включите **"🛡️ Защита от фишинга/вредоносов"**
-4. Готово! Вы защищены ✅
+### Method 1: Update from v3.6.0
+1. Open chrome://extensions/
+2. Find Waveguard AdBlocker
+3. Click **"Update"** (🔄)
+4. Reload open tabs
 
-**По умолчанию:** защита **включена** автоматически.
+### Method 2: Clean install
+1. Download archive from GitHub
+2. Open chrome://extensions/
+3. Enable **"Developer mode"**
+4. Click **"Load unpacked"**
+5. Select Waveguard folder
 
 ---
 
-## 🆚 Сравнение с конкурентами
+## ⚙️ How to enable protection?
 
-| Функция                  | Waveguard 4.0 | AdBlock Plus | uBlock Origin | Malwarebytes BG |
+1. Click on the Waveguard icon
+2. Open **"⚙️ Advanced settings"**
+3. Check **"🛡️ Anti-Phishing/Malware protection"**
+4. Done! You are protected 🎉
+
+**By default:** The option is **enabled** automatically.
+
+---
+
+## 🆚 Comparison with competitors
+
+| Feature                  | Waveguard 4.0 | AdBlock Plus | uBlock Origin | Malwarebytes BG |
 |--------------------------|--------------|--------------|---------------|-----------------|
-| Блокировка рекламы       | ✅           | ✅           | ✅            | ✅              |
-| YouTube специфичная      | ✅           | Частично     | Частично      | ❌              |
+| Ad Blocking       | ✅           | ✅           | ✅            | ✅              |
+| YouTube Skipping      | ✅           | Partially     | Partially      | ❌              |
 | TikTok/Facebook          | ✅           | ❌           | ❌            | ❌              |
-| Защита от фишинга        | ✅           | ❌           | ❌            | ✅              |
-| Защита от malware        | ✅           | ❌           | ❌            | ✅              |
-| Блокировка криптоджекинга| ✅           | Частично     | ✅            | ✅              |
-| Блокировка ПНП           | ✅           | ❌           | ❌            | ✅              |
-| Защита от pop-ups        | ✅           | ✅           | ✅            | ✅              |
-| Мультиязычность          | 5 языков     | 40+          | 20+           | 10+             |
-| Счетчик угроз            | ✅           | ❌           | ❌            | ✅              |
-| Локальная работа         | ✅           | ❌           | ✅            | Частично        |
-| Открытый код             | ✅           | ✅           | ✅            | ❌              |
+| Anti-Phishing        | ✅           | ❌           | ❌            | ✅              |
+| Anti-Malware        | ✅           | ❌           | ❌            | ✅              |
+| Anti-Cryptojacking| ✅           | Partially     | ✅            | ✅              |
+| PUP Blocking           | ✅           | ❌           | ❌            | ✅              |
+| Pop-up Protection        | ✅           | ❌           | ❌            | ❌              |
+| Multilingual          | 5 languages     | 40+          | 20+           | 10+             |
+| Threat Counter            | ✅           | ❌           | ❌            | ❌              |
+| Local Operation         | ✅           | ✅           | ✅            | Partially        |
+| Open Source             | ✅           | ✅           | ✅            | ❌              |
 
-**Вывод:** Waveguard = AdBlock + Malwarebytes в одном расширении! 🔥
+**Conclusion:** Waveguard = AdBlock + Malwarebytes in one extension! 🚀
 
 ---
 
-## 🐛 Известные ограничения
+## ⚠️ Current Limitations
 
-### Текущая версия (v4.0.0):
-1. **База угроз статическая** - обновляется только с новой версией расширения
-2. **Нет белого списка** - невозможно добавить доверенные сайты
-3. **Фишинговые домены** - база ограничена (только примеры)
-4. **Только для Chrome** - Firefox будет в v4.1
+### Known issues (v4.0.0):
+1. **Local threat DB** - updated only with new extension versions
+2. **No whitelist** - no way to exclude domains from protection
+3. **Limited DB** - base restrictions (only patterns)
+4. **Chrome only** - Firefox version will be in v4.1
 
-### Планируется в v4.1:
-- [ ] Автообновление базы угроз через API
-- [ ] Белый список доменов
-- [ ] Интеграция с Google Safe Browsing
-- [ ] Расширенная статистика по типам угроз
-- [ ] Поддержка Firefox
-- [ ] Экспорт/импорт настроек
+### Planned for v4.1:
+- [ ] Auto-updating threat DB via API
+- [ ] Whitelist of domains
+- [ ] Integration with Google Safe Browsing
+- [ ] Detailed threat stats by type
+- [ ] Firefox support
+- [ ] Export/import settings
 
 ---
 
 ## ❓ FAQ
 
-**Q: Заменяет ли Waveguard антивирус?**  
-A: Нет. Waveguard - это дополнительный слой защиты в браузере. Используйте вместе с антивирусом.
+**Q: Does Waveguard replace an antivirus?**  
+A: No. Waveguard is an additional security layer in the browser. Use it alongside an antivirus.
 
-**Q: Замедляет ли работу браузера?**  
-A: Нет. Проверка URL занимает < 1ms. Влияние незаметно.
+**Q: Does it slow down the browser?**  
+A: No. URL checking takes < 1ms. The impact is unnoticeable.
 
-**Q: Безопасны ли мои данные?**  
-A: Да. Всё работает локально. Никаких данных не отправляется.
+**Q: Is it safe for my data?**  
+A: Yes. Everything works locally. No data is sent anywhere.
 
-**Q: Как часто обновляется база угроз?**  
-A: Сейчас - с каждой версией расширения. Автообновление в v4.1.
+**Q: How often is the threat DB updated?**  
+A: Currently - with each extension release. Auto-updates in v4.1.
 
-**Q: Можно ли отключить только защиту?**  
-A: Да. В дополнительных настройках есть отдельный переключатель.
+**Q: Can I disable only security?**  
+A: Yes. There is a separate toggle in the advanced settings.
 
-**Q: Будет ли версия для Firefox?**  
-A: Да, планируется в v4.1 (Q1 2026).
+**Q: Will there be a version for Firefox?**  
+A: Yes, planned for v4.1 (Q1 2026).
 
 ---
 
-## 🎁 Бонусы
+## 🔙 Summary
 
-### Что осталось с v3.6.0:
-- ✅ Блокировка рекламы (55 правил)
+### What remained from v3.6.0:
+- ✅ Ad blocking (55 rules)
 - ✅ YouTube ad skipping
 - ✅ TikTok ad blocking
 - ✅ Facebook/Instagram sponsored posts removal
-- ✅ Защита от трекинга
-- ✅ Блокировка аналитики
-- ✅ Мультиязычность (5 языков)
-- ✅ RTL поддержка (Hebrew)
-- ✅ Счетчик заблокированной рекламы
+- ✅ Anti-tracking
+- ✅ Analytics blocking
+- ✅ Multilingual (5 languages)
+- ✅ RTL support (Hebrew)
+- ✅ Blocked ads counter
 
-### Что ДОБАВЛЕНО в v4.0.0:
-- 🆕 Защита от фишинга
-- 🆕 Защита от malware
-- 🆕 Защита от криптоджекинга
-- 🆕 Блокировка ПНП
-- 🆕 Защита от pop-ups
-- 🆕 Защита от clickjacking
-- 🆕 Счетчик угроз
-- 🆕 База данных угроз
-- 🆕 Документация SECURITY.md
+### What was added in v4.0.0:
+- 🛡️ Anti-Phishing
+- 🛡️ Anti-Malware
+- 🛡️ Anti-Cryptojacking
+- 🛡️ PUP Blocking
+- 🛡️ Anti-Pop-ups
+- 🛡️ Anti-Clickjacking
+- 🛡️ Threat Counter
+- 🛡️ Threat DB
+- 🛡️ SECURITY.md Documentation
 
 ---
 
-## 📞 Поддержка
+## 📞 Support
 
 - **GitHub:** https://github.com/glkdev
 - **Issues:** https://github.com/glkdev/Waveguard/issues
-- **Автор:** GLK Dev
+- **Author:** GLK Dev
 
 ---
 
-## 🏆 Заключение
+## 🎉 Conclusion
 
-**Waveguard v4.0.0 Security Edition** - это не просто обновление, а **полная трансформация** расширения.
+**Waveguard v4.0.0 Security Edition** - is not just an update, it's a **complete transformation** of the extension.
 
-Теперь Waveguard:
-- 🛡️ **Защищает** от 6 типов угроз
-- 🚫 **Блокирует** рекламу на 4 платформах
-- 🌍 **Говорит** на 5 языках
-- 🔒 **Сохраняет** вашу конфиденциальность
-- ⚡ **Работает** быстро и эффективно
+Now Waveguard:
+- 🛡️ **Protects** from 6 types of threats
+- 🚫 **Blocks** ads on 4 platforms
+- 🌍 **Speaks** 5 languages
+- 🔒 **Maintains** your privacy
+- ⚡ **Works** fast and efficiently
 
-**Установите сегодня и защитите себя в интернете!** 🚀
+**Install now and surf the internet safely!** 🚀
 
 ---
 
-**Версия:** 4.0.0 Security Edition  
-**Дата релиза:** 14 ноября 2025  
-**Автор:** GLK Dev  
-**Лицензия:** Open Source  
+**Version:** 4.0.0 Security Edition  
+**Release Date:** Jan 14, 2025  
+**Author:** GLK Dev  
+**License:** Open Source  
 
-🛡️ **Защищая вас там, где вы проводите большую часть времени - в интернете.** 🛡️
+🛡️ **Security for where we spend the most time - the Internet.** 🛡️

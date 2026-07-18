@@ -1,135 +1,133 @@
-# 🚀 БЫСТРЫЙ СТАРТ - Waveguard AdBlocker
+# 🚀 Quick Start - Waveguard AdBlocker
 
-Расширение для Chrome готово! Осталось только создать иконки и загрузить его в браузер.
+The Chrome extension is ready! You just need to create icons and load it into the browser.
 
-## ⚡ Шаг 1: Создание иконок (2 минуты)
+## 🎨 Step 1: Create Icons (2 minutes)
 
-1. **Откройте файл** `create-icons.html` в браузере Chrome:
-   - Найдите файл в папке проекта
-   - Кликните правой кнопкой мыши → "Открыть с помощью" → Chrome
+1. **Open the file** create-icons.html in Chrome:
+   - Find the file in the project folder
+   - Right-click -> "Open with" -> Chrome
 
-2. **Скачайте иконки**:
-   - Нажмите кнопку "⬇ Скачать всё"
-   - Сохраните 3 файла: `icon16.png`, `icon48.png`, `icon128.png`
+2. **Download icons**:
+   - Click the button "⬇️ Download all"
+   - Save the 3 files: icon16.png, icon48.png, icon128.png
 
-3. **Переместите иконки**:
-   - Поместите все 3 PNG файла в папку `icons/` проекта
+3. **Move icons**:
+   - Move all 3 PNG files to the icons/ folder of the project
 
-## 🔧 Шаг 2: Установка в Chrome (1 минута)
+## 📥 Step 2: Installation in Chrome (1 minute)
 
-1. Откройте Chrome и введите в адресной строке:
-   ```
+1. Open Chrome and type in the address bar:
    chrome://extensions/
-   ```
 
-2. **Включите "Режим разработчика"** (переключатель справа вверху)
+2. **Enable "Developer mode"** (toggle top right)
 
-3. **Нажмите "Загрузить распакованное расширение"**
+3. **Click "Load unpacked"**
 
-4. **Выберите папку проекта**: `G:\VSCode projects\Waveguard`
+4. **Select the project folder**: E:\VSCode projects\Waveguard\WaveguardEX-Chrome
 
-5. **Готово!** Расширение установлено ✅
+5. **Done!** The extension is installed 🎉
 
-## 🎯 Шаг 3: Использование
+## 🎮 Step 3: Usage
 
-1. **Найдите иконку** расширения в панели инструментов Chrome (справа от адресной строки)
+1. **Find the icon** of the extension in the Chrome toolbar (top right)
 
-2. **Кликните по иконке** - откроется панель управления
+2. **Click on the icon** - the control panel will open
 
-3. **Проверьте работу**:
-   - Откройте любой сайт с рекламой
-   - Откройте YouTube и попробуйте посмотреть видео
-   - Счетчик в popup покажет количество заблокированной рекламы
+3. **Check operation**:
+   - Open any site with ads
+   - Open YouTube and try watching a video
+   - The counter in the popup will show the number of blocked ads
 
-## 🎨 Альтернатива: Установка БЕЗ иконок
+## 🔧 Alternative: Installation without icons
 
-Если не хотите возиться с иконками, можно временно их отключить:
+If you don't want to mess with icons, just temporarily disable them:
 
-1. Откройте `manifest.json`
-2. Удалите или закомментируйте секцию `"icons"` (строки 5-9)
-3. Удалите `"default_icon"` в секции `"action"` (строки 30-34)
-4. Сохраните файл и загружайте расширение в Chrome
+1. Open manifest.json
+2. Remove the entire "icons" section (lines 5-9)
+3. Remove "default_icon" in the "action" section (lines 30-34)
+4. Save the file and load the extension in Chrome
 
-Расширение будет работать с дефолтной иконкой Chrome.
+The extension will work with the default Chrome icon.
 
-## ✨ Что умеет расширение
+## 🌟 What the extension can do
 
-✅ **Блокирует рекламу на всех сайтах**:
+🚫 **Block ads on all sites**:
 - Google AdSense
-- Яндекс.Директ
-- Баннеры и всплывающие окна
-- Сторонние рекламные сети
+- Yandex.Direct
+- Banners and pop-up windows
+- Teaser networks
 
-✅ **Блокирует рекламу на YouTube**:
-- Автоматически пропускает видео-рекламу
-- Ускоряет рекламные ролики до 16x
-- Удаляет рекламные баннеры и оверлеи
-- Работает при навигации по сайту
+📺 **Block ads on YouTube**:
+- Automatically skips video ads
+- Speeds up unskippable videos by 16x
+- Hides ad banners and overlays
+- Works upon page navigation
 
-✅ **Удобное управление**:
-- Раздельное включение/выключение для сайтов и YouTube
-- Счетчик заблокированной рекламы
-- Сброс статистики
+🎛️ **Control interface**:
+- Separate enable/disable for sites and YouTube
+- Blocked ads counter
+- Clear statistics
 
-## 🔍 Проверка работы
+## 🔍 Operation Check
 
-### На обычных сайтах:
-1. Откройте новостной сайт или блог
-2. Реклама должна исчезнуть
-3. Проверьте счетчик в popup расширения
+### On a regular site:
+1. Open a news site or blog
+2. Banners should disappear
+3. Check the counter in the extension popup
 
-### На YouTube:
-1. Откройте любое видео с рекламой
-2. Реклама должна автоматически пропуститься
-3. Рекламные баннеры должны исчезнуть
+### On YouTube:
+1. Open any video with ads
+2. The ad should be automatically skipped
+3. Banners over the video should disappear
 
-## 🐛 Возможные проблемы
+## 🛠️ Troubleshooting
 
-### Расширение не загружается
-- **Проблема**: "Manifest file is missing"
-- **Решение**: Убедитесь, что выбрали папку `Waveguard`, где находится `manifest.json`
+### Extension won't load
+- **Problem**: "Manifest file is missing"
+- **Solution**: Make sure you selected the Waveguard folder where manifest.json is located
 
-### Ошибка с иконками
-- **Проблема**: "Could not load icon"
-- **Решение**: Либо создайте иконки, либо удалите секции с иконками из `manifest.json`
+### Error with icons
+- **Problem**: "Could not load icon"
+- **Solution**: Either create the icons or remove the section with icons from manifest.json
 
-### Реклама не блокируется
-- **Проблема**: Реклама всё ещё показывается
-- **Решение**: 
-  - Проверьте, включены ли переключатели в popup
-  - Перезагрузите страницу (Ctrl+R или F5)
-  - Проверьте консоль (F12) на наличие ошибок
+### Ads are not blocked
+- **Problem**: Banners are still displayed
+- **Solution**: 
+  - Check if the switch is enabled in the popup
+  - Reload the page (Ctrl+R or F5)
+  - Check the console (F12) for errors
 
-### YouTube реклама не пропускается
-- **Проблема**: Реклама на YouTube не блокируется
-- **Решение**: 
-  - Убедитесь, что переключатель YouTube включен (синий)
-  - Перезагрузите страницу YouTube
-  - Подождите 1-2 секунды - скрипт должен активироваться
+### YouTube ads are not skipped
+- **Problem**: Ads on YouTube don't skip
+- **Solution**: 
+  - Make sure the YouTube switch is enabled (blue)
+  - Reload the YouTube page
+  - Wait 1-2 seconds - the script needs time to activate
 
-## 🔄 Обновление расширения
+## 🔄 Updating the extension
 
-После изменения кода:
-1. Перейдите на `chrome://extensions/`
-2. Найдите Waveguard AdBlocker
-3. Нажмите кнопку обновления (↻)
-4. Перезагрузите открытые вкладки
+After changing the code:
+1. Go to chrome://extensions/
+2. Find Waveguard AdBlocker
+3. Click the update button (🔄)
+4. Reload open tabs
 
-## 📚 Дополнительная информация
+## 📚 Additional Information
 
-- **Полная документация**: см. `README.md`
-- **Инструкция по установке**: см. `INSTALL.md`
-- **Генерация иконок**: откройте `create-icons.html` в браузере
+- **Full documentation**: see README.md
+- **Installation guide**: see INSTALL.md
+- **Icon generation**: open create-icons.html in browser
 
-## 🛡️ Конфиденциальность
+## 🔒 Privacy
 
-- ✅ Работает полностью локально
-- ✅ Не собирает личные данные
-- ✅ Не отправляет информацию на сервера
-- ✅ Открытый исходный код
+- ✅ Works completely locally
+- ✅ Does not collect user data
+- ✅ Does not send information to servers
+- ✅ Open source code
 
 ---
 
-**Готово! Наслаждайтесь интернетом без рекламы! 🎉**
+**Done! Enjoy an ad-free internet! 🎉**
 
-Если возникнут вопросы, проверьте `README.md` или `INSTALL.md` для подробной информации.
+If you have questions, check README.md or INSTALL.md for more information.
