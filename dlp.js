@@ -29,34 +29,67 @@ function checkAndMaskText(text) {
   return { maskedText, foundSensitive };
 }
 
+function maskTextNodesInElement(element) {
+  let foundSensitiveAnywhere = false;
+  
+  // Use TreeWalker to only process text nodes, preserving HTML structure
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+  let node;
+  
+  while ((node = walker.nextNode())) {
+    const originalText = node.nodeValue;
+    if (!originalText || !originalText.trim()) continue;
+    
+    const { maskedText, foundSensitive } = checkAndMaskText(originalText);
+    
+    if (foundSensitive && originalText !== maskedText) {
+      node.nodeValue = maskedText;
+      foundSensitiveAnywhere = true;
+    }
+  }
+  
+  return foundSensitiveAnywhere;
+}
+
 function handleInputEvent(event) {
   if (!isDLPEnabled) return;
   
   const target = event.target;
   
-  // Check textareas and input fields
+  // Check textareas and standard input fields
   if (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT') {
     const { maskedText, foundSensitive } = checkAndMaskText(target.value);
     if (foundSensitive && target.value !== maskedText) {
-      // In a real scenario, we might want to prompt the user instead of auto-masking,
-      // but for this MVP, auto-masking provides immediate protection.
       target.value = maskedText;
       showDLPWarning();
     }
   }
-  // Check contenteditable elements (like those used in ChatGPT)
+  // Check contenteditable elements (like those used in ChatGPT/Claude)
   else if (target.isContentEditable) {
-    const { maskedText, foundSensitive } = checkAndMaskText(target.innerText);
-    if (foundSensitive && target.innerText !== maskedText) {
-      target.innerText = maskedText;
+    const selection = window.getSelection();
+    let savedRange = null;
+    if (selection.rangeCount > 0) {
+      savedRange = selection.getRangeAt(0).cloneRange();
+    }
+    
+    const foundSensitive = maskTextNodesInElement(target);
+    
+    if (foundSensitive) {
       showDLPWarning();
-      // Move cursor to end
-      const range = document.createRange();
-      const sel = window.getSelection();
-      range.selectNodeContents(target);
-      range.collapse(false);
-      sel.removeAllRanges();
-      sel.addRange(range);
+      // Restore cursor position if possible (rough approximation after text change)
+      try {
+        if (savedRange) {
+          selection.removeAllRanges();
+          selection.addRange(savedRange);
+        }
+      } catch (e) {
+        // Fallback: move to end
+        const range = document.createRange();
+        range.selectNodeContents(target);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
   }
 }
@@ -67,7 +100,7 @@ function showDLPWarning() {
   
   const warning = document.createElement('div');
   warning.id = 'waveguard-dlp-warning';
-  warning.style.cssText = 
+  warning.style.cssText = `
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -83,15 +116,15 @@ function showDLPWarning() {
     align-items: center;
     gap: 10px;
     transition: opacity 0.3s;
-  ;
+  `;
   
-  warning.innerHTML = 
+  warning.innerHTML = `
     <span style="font-size: 20px;">🛡️</span>
     <div>
       <strong>Waveguard DLP Alert</strong><br/>
       Sensitive data (PII) was detected and masked before sending to AI.
     </div>
-  ;
+  `;
   
   document.body.appendChild(warning);
   
@@ -101,5 +134,12 @@ function showDLPWarning() {
   }, 4000);
 }
 
-// Attach listeners to input events
+// Attach listeners to input events (using input event captures typing in real time)
 document.addEventListener('input', handleInputEvent, true);
+// Also listen for paste events as people often paste sensitive info
+document.addEventListener('paste', (e) => {
+    // Let the paste happen, then trigger the input check slightly later
+    setTimeout(() => {
+        if (e.target) handleInputEvent({target: e.target});
+    }, 10);
+}, true);
