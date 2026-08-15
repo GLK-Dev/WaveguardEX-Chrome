@@ -34,12 +34,16 @@
     if (Math.abs(video.currentTime - lastCheckedTime) < 0.5) return;
     lastCheckedTime = video.currentTime;
 
-    // Определяем рекламный сегмент по индикаторам YouTube
-    const playerAd = document.querySelector('.video-ads.ytp-ad-module');
-    const adShowing = document.querySelector('.ad-showing');
+    // Определяем рекламный сегмент по индикаторам YouTube.
+    // ВАЖНО: .video-ads.ytp-ad-module - это постоянный контейнер в DOM плеера,
+    // он присутствует всегда, даже когда реклама не показывается, поэтому его
+    // нельзя использовать как признак рекламы (иначе обычные короткие видео
+    // будут ошибочно перематываться в конец). Используем только реальные
+    // состояния, которые YouTube включает/выключает именно во время рекламы.
+    const adShowing = document.querySelector('.ad-showing, .ad-interrupting');
     const adText = document.querySelector('.ytp-ad-text');
     
-    if (playerAd || adShowing || adText) {
+    if (adShowing || adText) {
       isAdSegmentPlaying = true;
       
       // Пытаемся пропустить сегмент
@@ -87,13 +91,13 @@
       } catch (e) {}
     }
 
-    // Проверяем наличие рекламы
+    // Проверяем наличие рекламы (только по реальным состояниям, .video-ads
+    // и .ytp-ad-module - постоянные контейнеры плеера, а не признак рекламы)
     const video = document.querySelector('video');
     if (video) {
-      const adContainer = document.querySelector('.video-ads.ytp-ad-module');
-      const adPlaying = document.querySelector('.ad-showing');
+      const adPlaying = document.querySelector('.ad-showing, .ad-interrupting');
       
-      if (adContainer || adPlaying) {
+      if (adPlaying) {
         // Максимально ускоряем рекламу
         try {
           if (video.duration && video.duration < 60) {
