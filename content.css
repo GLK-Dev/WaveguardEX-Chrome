@@ -44,11 +44,14 @@ ins.adsbygoogle,
   display: none !important;
 }
 
-/* Баннеры */
-[class*="banner"],
-[id*="banner"],
-[class*="sponsor"],
-[id*="sponsor"] {
+/* Рекламные баннеры и спонсорский контент (узкие селекторы, чтобы не задевать
+   обычные "hero banner" / "sponsors" секции сайтов) */
+[class*="ad-banner"],
+[id*="ad-banner"],
+[class*="banner-ad"],
+[id*="banner-ad"],
+[class*="sponsored-content"],
+[class*="sponsor-block"] {
   display: none !important;
 }
 

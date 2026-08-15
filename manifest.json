@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Waveguard AdBlocker",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Блокирует рекламу и защищает от фишинга, вредоносных сайтов, криптоджекинга и ПНП",
   "author": "GLK Dev",
   "homepage_url": "https://github.com/GLK-Dev/WaveguardEX-Chrome",
@@ -36,16 +36,41 @@
       "matches": [
         "<all_urls>"
       ],
+      "exclude_matches": [
+        "*://*.youtube.com/*",
+        "*://*.tiktok.com/*",
+        "*://*.facebook.com/*",
+        "*://*.instagram.com/*"
+      ],
       "js": [
-        "inject-fingerprint.js",
-        "content.js",
-        "security.js",
-        "cookie-banner.js",
-        "ai-dom-scanner.js"
+        "content.js"
       ],
       "css": [
         "content.css"
       ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "inject-fingerprint.js",
+        "page-guard-bridge.js",
+        "security.js",
+        "cookie-banner.js",
+        "ai-dom-scanner.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "page-guard.js"
+      ],
+      "world": "MAIN",
       "run_at": "document_start"
     },
     {

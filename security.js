@@ -274,93 +274,6 @@
     }, true);
   }
 
-  // Защита от агрессивных всплывающих окон
-  function blockAggressivePopups() {
-    if (!isSecurityEnabled) return;
-
-    let popupAttempts = 0;
-    const maxPopups = 2;
-
-    // Перехватываем window.open
-    const originalOpen = window.open;
-    window.open = function(...args) {
-      popupAttempts++;
-      
-      if (popupAttempts > maxPopups) {
-        console.log('[Waveguard Security] Заблокировано всплывающее окно:', args[0]);
-        blockedThreatsCount++;
-        chrome.runtime.sendMessage({ 
-          action: 'threatBlocked',
-          threat: 'popup'
-        });
-        return null;
-      }
-
-      return originalOpen.apply(this, args);
-    };
-
-    // Сброс счетчика каждые 5 секунд
-    setInterval(() => {
-      popupAttempts = 0;
-    }, 5000);
-  }
-
-  // Блокировка криптоджекинг скриптов
-  function blockCryptojacking() {
-    if (!isSecurityEnabled) return;
-
-    // Список известных криптомайнинг библиотек
-    const cryptoMinerPatterns = [
-      'coinhive', 'coin-hive', 'jsecoin', 'crypto-loot',
-      'cryptoloot', 'webminepool', 'monerominer', 'minero'
-    ];
-
-    // Блокируем создание Web Workers (используются для майнинга)
-    const originalWorker = window.Worker;
-    window.Worker = function(scriptURL) {
-      const url = scriptURL.toString().toLowerCase();
-      
-      for (let pattern of cryptoMinerPatterns) {
-        if (url.includes(pattern)) {
-          console.log('[Waveguard Security] Заблокирован криптомайнер:', scriptURL);
-          blockedThreatsCount++;
-          chrome.runtime.sendMessage({ 
-            action: 'threatBlocked',
-            threat: 'cryptojacking'
-          });
-          throw new Error('Blocked by Waveguard Security');
-        }
-      }
-
-      return new originalWorker(scriptURL);
-    };
-
-    // Блокируем известные майнинг объекты
-    const cryptoObjects = ['CoinHive', 'CRLT', 'JSEcoin'];
-    cryptoObjects.forEach(obj => {
-      try {
-        Object.defineProperty(window, obj, {
-          get: function() {
-            console.log('[Waveguard Security] Заблокирована попытка майнинга:', obj);
-            blockedThreatsCount++;
-            chrome.runtime.sendMessage({ 
-              action: 'threatBlocked',
-              threat: 'cryptojacking'
-            });
-            return undefined;
-          },
-          set: function() {
-            return false;
-          },
-          configurable: true
-        });
-      } catch (e) {
-        // Свойство уже может быть защищено другим блокировщиком
-        console.log('[Waveguard Security] Объект ' + obj + ' уже защищен или не может быть переопределен.');
-      }
-    });
-  }
-
   // Защита от clickjacking
   function preventClickjacking() {
     if (!isSecurityEnabled) return;
@@ -438,8 +351,6 @@
   function initSecurity() {
     checkCurrentPage();
     blockPUPDownloads();
-    blockAggressivePopups();
-    blockCryptojacking();
     preventClickjacking();
     monitorSuspiciousActivity();
 

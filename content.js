@@ -15,13 +15,15 @@
     '[class*="ad-container"]',
     '[id*="ad-container"]',
     '[class*="adsbygoogle"]',
-    '[class*="banner"]',
-    '[id*="banner"]',
+    '[class*="ad-banner"]',
+    '[id*="ad-banner"]',
+    '[class*="banner-ad"]',
+    '[id*="banner-ad"]',
     'iframe[src*="doubleclick"]',
     'iframe[src*="googlesyndication"]',
     'iframe[src*="ads"]',
-    '[class*="sponsor"]',
-    '[id*="sponsor"]',
+    '[class*="sponsored-content"]',
+    '[class*="sponsor-block"]',
     '[data-ad]',
     '[data-advertisement]',
     // Яндекс реклама
@@ -37,6 +39,24 @@
     '[class*="outbrain"]',
     '[class*="criteo"]'
   ];
+
+  // Элементы, которые нельзя скрывать, даже если они совпали с рекламным селектором
+  // (защита от false-positive совпадений на структурных контейнерах страницы)
+  function isCriticalElement(element) {
+    const tag = element.tagName;
+    if (tag === 'HTML' || tag === 'BODY' || tag === 'MAIN' || tag === 'ARTICLE') return true;
+    if (element.querySelector('video, audio')) return true;
+
+    const id = (element.id || '').toLowerCase();
+    if (/^(app|root|main|content|page|wrapper|__next)$/.test(id)) return true;
+
+    // Слишком крупный элемент (значительная часть вьюпорта) - вероятно, не реклама, а контейнер контента
+    const rect = element.getBoundingClientRect();
+    const viewportArea = window.innerWidth * window.innerHeight;
+    if (viewportArea > 0 && rect.width * rect.height > viewportArea * 0.5) return true;
+
+    return false;
+  }
 
   let blockedCount = 0;
   let batchTimeout = null;
@@ -54,6 +74,8 @@
         elements.forEach(element => {
           // Проверяем через WeakSet (быстрее чем getAttribute)
           if (!processedElements.has(element)) {
+            if (isCriticalElement(element)) return;
+
             processedElements.add(element);
             element.style.cssText = 'display: none !important; visibility: hidden !important;';
             element.setAttribute('data-ad-blocked', 'true');
@@ -127,55 +149,8 @@
     });
   }
 
-  // Блокируем создание новых iframe с рекламой (защита)
-  const originalCreateElement = document.createElement;
-  document.createElement = function(tagName) {
-    const element = originalCreateElement.call(document, tagName);
-    
-    if (tagName.toLowerCase() === 'iframe') {
-      const originalSetAttribute = element.setAttribute;
-      element.setAttribute = function(name, value) {
-        if (name === 'src' && typeof value === 'string' && isEnabled) {
-          const adPatterns = [
-            'doubleclick.net',
-            'googlesyndication.com',
-            'googleadservices.com',
-            '/ads/',
-            'advertising.com',
-            'adnxs.com',
-            'criteo.com',
-            'taboola.com'
-          ];
-          
-          if (adPatterns.some(pattern => value.includes(pattern))) {
-            console.log('[Waveguard] Заблокирован iframe:', value);
-            try {
-              chrome.runtime.sendMessage({ action: 'adBlocked' });
-            } catch (e) {}
-            return; // Не устанавливаем src
-          }
-        }
-        return originalSetAttribute.call(element, name, value);
-      };
-    }
-    
-    return element;
-  };
-
-  // Защита от fingerprinting (опционально)
-  if (navigator.getBattery) {
-    delete navigator.getBattery; // Блокируем Battery API
-  }
-  
-  // Защита от Canvas fingerprinting
-  const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
-  HTMLCanvasElement.prototype.toDataURL = function(type) {
-    if (type === 'image/png' && this.width === 16 && this.height === 16) {
-      // Возможная попытка fingerprinting
-      return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-    }
-    return originalToDataURL.apply(this, arguments);
-  };
+  // Блокировка рекламных iframe и canvas fingerprint noise перенесены в page-guard.js
+  // (эти патчи должны работать в MAIN world, а не в изолированном контексте content script)
 
   console.log('[Waveguard] Content script загружен с защитой');
 })();

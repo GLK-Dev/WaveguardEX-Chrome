@@ -150,6 +150,13 @@
         const elements = document.querySelectorAll(selector);
         elements.forEach(element => {
           if (!processedElements.has(element)) {
+            // Никогда не трогаем сам плеер или контейнер с видео - защита от того,
+            // чтобы широкие селекторы (.video-ads, .ytp-ad-module) случайно не
+            // скрыли/удалили реальное видео вместо рекламного оверлея
+            if (element.id === 'movie_player' || element.querySelector('video')) {
+              return;
+            }
+
             processedElements.add(element);
             element.style.display = 'none';
             element.remove();
