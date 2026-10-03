@@ -1,0 +1,12 @@
+[
+  {"id": 1, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||coinhive.com^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 2, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||coin-hive.com^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 3, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||jsecoin.com^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 4, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||crypto-loot.com^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 5, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||cryptoloot.pro^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 6, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||webminepool.com^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 7, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||monerominer.rocks^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 8, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||minero.cc^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 9, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||listat.biz^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}},
+  {"id": 10, "priority": 2, "action": {"type": "block"}, "condition": {"urlFilter": "||lmodr.biz^", "resourceTypes": ["script", "xmlhttprequest", "sub_frame", "websocket"]}}
+]

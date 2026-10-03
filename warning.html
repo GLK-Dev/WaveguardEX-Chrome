@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Waveguard - предупреждение</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: #b91c1c; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .card { background: #fff; padding: 40px; border-radius: 10px; max-width: 520px; text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.3); }
+    h1 { color: #dc2626; margin: 0 0 20px; font-size: 28px; }
+    p { color: #333; font-size: 16px; line-height: 1.6; }
+    code { display: block; background: #f3f4f6; padding: 8px 10px; border-radius: 5px; word-break: break-all;
+      font-size: 13px; color: #555; margin: 10px 0 30px; }
+    button { border: none; padding: 14px 32px; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: 600; margin: 4px; }
+    #back { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+    #proceed { background: #f3f4f6; color: #666; border: 2px solid #d1d5db; }
+    footer { color: #999; font-size: 12px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Опасность!</h1>
+    <p id="message"></p>
+    <code id="url"></code>
+    <button id="back">Вернуться назад</button>
+    <button id="proceed">Продолжить на свой риск</button>
+    <footer>Защищено Waveguard</footer>
+  </div>
+  <script src="warning.js"></script>
+</body>
+</html>

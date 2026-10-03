@@ -3,17 +3,22 @@
 // script relays settings in and blocked-threat events out via window events.
 (function() {
   function sendConfig() {
-    chrome.storage.sync.get(['securityProtection'], (result) => {
+    chrome.storage.sync.get(['securityProtection', 'antiTracking'], (result) => {
       window.dispatchEvent(new CustomEvent('waveguard-config', {
-        detail: { securityProtection: result.securityProtection !== false }
+        detail: {
+          securityProtection: result.securityProtection !== false,
+          antiTracking: result.antiTracking !== false
+        }
       }));
     });
   }
 
   sendConfig();
+  // MAIN-world listeners may register after the first dispatch; repeat once the DOM is ready.
+  document.addEventListener('DOMContentLoaded', sendConfig, { once: true });
 
   chrome.storage.onChanged.addListener((changes, namespace) => {
-    if (namespace === 'sync' && changes.securityProtection) {
+    if (namespace === 'sync' && (changes.securityProtection || changes.antiTracking)) {
       sendConfig();
     }
   });

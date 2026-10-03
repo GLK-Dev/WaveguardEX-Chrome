@@ -179,13 +179,12 @@ const miniModeToggle = document.getElementById('miniModeToggle');
     }
   });
 
-  // Обновляем счетчики каждую секунду из local storage
-  setInterval(() => {
-    chrome.storage.local.get(['blockedAdsCount', 'blockedThreatsCount'], (result) => {
-      blockedCountElement.textContent = result.blockedAdsCount || 0;
-      threatsCountElement.textContent = result.blockedThreatsCount || 0;
-    });
-  }, 1000);
+  // Обновляем счетчики по событию изменения storage вместо опроса
+  chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace !== 'local') return;
+    if (changes.blockedAdsCount) blockedCountElement.textContent = changes.blockedAdsCount.newValue || 0;
+    if (changes.blockedThreatsCount) threatsCountElement.textContent = changes.blockedThreatsCount.newValue || 0;
+  });
 
   // Проверка статуса подключения к Десктопу
   const desktopDot = document.getElementById('desktopDot');

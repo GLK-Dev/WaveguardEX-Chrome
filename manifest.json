@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Waveguard AdBlocker",
-  "version": "5.0.2",
+  "version": "5.1.0",
+  "minimum_chrome_version": "120",
   "description": "Блокирует рекламу и защищает от фишинга, вредоносных сайтов, криптоджекинга и ПНП",
   "author": "GLK Dev",
   "homepage_url": "https://github.com/GLK-Dev/WaveguardEX-Chrome",
@@ -13,8 +14,7 @@
   "permissions": [
     "storage",
     "declarativeNetRequest",
-    "tabs",
-    "activeTab"
+    "alarms"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -25,9 +25,24 @@
   "declarative_net_request": {
     "rule_resources": [
       {
-        "id": "ruleset_1",
+        "id": "ads",
         "enabled": true,
-        "path": "rules.json"
+        "path": "rules/ads.json"
+      },
+      {
+        "id": "trackers",
+        "enabled": true,
+        "path": "rules/trackers.json"
+      },
+      {
+        "id": "miners",
+        "enabled": true,
+        "path": "rules/miners.json"
+      },
+      {
+        "id": "tracking_params",
+        "enabled": true,
+        "path": "rules/tracking-params.json"
       }
     ]
   },
@@ -55,7 +70,6 @@
         "<all_urls>"
       ],
       "js": [
-        "inject-fingerprint.js",
         "page-guard-bridge.js",
         "security.js",
         "cookie-banner.js",
@@ -68,9 +82,11 @@
         "<all_urls>"
       ],
       "js": [
-        "page-guard.js"
+        "page-guard.js",
+        "anti-fingerprint.js"
       ],
       "world": "MAIN",
+      "all_frames": true,
       "run_at": "document_start"
     },
     {
@@ -125,9 +141,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "content.css",
-        "malicious-domains.json",
-        "anti-fingerprint.js"
+        "warning.html"
       ],
       "matches": [
         "<all_urls>"

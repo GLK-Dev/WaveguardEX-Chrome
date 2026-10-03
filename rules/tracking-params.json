@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "redirect",
+      "redirect": {
+        "transform": {
+          "queryTransform": {
+            "removeParams": [
+              "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+              "fbclid", "gclid", "gclsrc", "dclid", "zanpid",
+              "msclkid", "mc_eid", "_bta_tid", "_bta_c", "igshid", "_hsenc", "_hsmi"
+            ]
+          }
+        }
+      }
+    },
+    "condition": {
+      "urlFilter": "?",
+      "resourceTypes": ["main_frame"]
+    }
+  }
+]

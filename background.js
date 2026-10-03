@@ -1,12 +1,7 @@
-// Background Service Worker для управления расширением
+// Background service worker. All state lives in chrome.storage / declarativeNetRequest:
+// the worker can be stopped at any moment, so nothing important may sit in globals.
 
-// Счётчик в памяти для избежания частых записей в storage
-let blockedAdsCount = 0;
-let blockedThreatsCount = 0;
-let saveTimeout = null;
-
-// Кэш настроек для быстрого доступа
-let settings = {
+const DEFAULT_SETTINGS = {
   adBlockEnabled: true,
   youtubeAdBlockEnabled: true,
   tiktokAdBlockEnabled: true,
@@ -18,241 +13,203 @@ let settings = {
   language: 'ru'
 };
 
-// Инициализация настроек при установке (при обновлении настройки пользователя не трогаем)
-chrome.runtime.onInstalled.addListener((details) => {
-  if (details.reason !== 'install') return;
-  chrome.storage.sync.set({
-    adBlockEnabled: true,
-    youtubeAdBlockEnabled: true,
-    tiktokAdBlockEnabled: true,
-    facebookAdBlockEnabled: true,
-    strictMode: false,
-    antiTracking: true,
-    blockAnalytics: true,
-    securityProtection: true,
-    language: 'ru'
-  });
-  
-  // Счётчики храним в local storage (быстрее и без квот)
-  chrome.storage.local.get(['blockedAdsCount', 'blockedThreatsCount'], (data) => {
-    blockedAdsCount = data.blockedAdsCount || 0;
-    blockedThreatsCount = data.blockedThreatsCount || 0;
-  });
-  
-  console.log('[Waveguard] Расширение установлено и активировано с защитой');
-});
+// Setting -> static ruleset (ids from manifest.json).
+const SETTING_RULESETS = {
+  adBlockEnabled: 'ads',
+  blockAnalytics: 'trackers',
+  securityProtection: 'miners',
+  antiTracking: 'tracking_params'
+};
 
-// Загружаем настройки при старте
-chrome.storage.sync.get([
-  'adBlockEnabled', 
-  'youtubeAdBlockEnabled', 
-  'tiktokAdBlockEnabled',
-  'facebookAdBlockEnabled',
-  'strictMode',
-  'antiTracking',
-  'blockAnalytics',
-  'securityProtection',
-  'language'
-], (data) => {
-  settings.adBlockEnabled = data.adBlockEnabled !== false;
-  settings.youtubeAdBlockEnabled = data.youtubeAdBlockEnabled !== false;
-  settings.tiktokAdBlockEnabled = data.tiktokAdBlockEnabled !== false;
-  settings.facebookAdBlockEnabled = data.facebookAdBlockEnabled !== false;
-  settings.strictMode = data.strictMode || false;
-  settings.antiTracking = data.antiTracking !== false;
-  settings.blockAnalytics = data.blockAnalytics !== false;
-  settings.securityProtection = data.securityProtection !== false;
-  settings.language = data.language || 'ru';
-  syncAdRuleset();
-});
+const WARNING_URL = chrome.runtime.getURL('warning.html');
 
-// Загружаем счётчики при старте
-chrome.storage.local.get(['blockedAdsCount', 'blockedThreatsCount'], (data) => {
-  blockedAdsCount = data.blockedAdsCount || 0;
-  blockedThreatsCount = data.blockedThreatsCount || 0;
-});
-
-// Включает/выключает сетевой рулсет вместе с переключателем блокировки рекламы
-function syncAdRuleset() {
-  chrome.declarativeNetRequest.updateEnabledRulesets(
-    settings.adBlockEnabled
-      ? { enableRulesetIds: ['ruleset_1'] }
-      : { disableRulesetIds: ['ruleset_1'] }
-  ).catch((e) => console.error('[Waveguard] updateEnabledRulesets:', e));
+async function getSettings() {
+  const stored = await chrome.storage.sync.get(Object.keys(DEFAULT_SETTINGS));
+  return { ...DEFAULT_SETTINGS, ...stored };
 }
 
-// Слушаем изменения настроек для обновления кэша
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace === 'sync') {
-    if (changes.adBlockEnabled) {
-      settings.adBlockEnabled = changes.adBlockEnabled.newValue;
-      syncAdRuleset();
-    }
-    if (changes.youtubeAdBlockEnabled) {
-      settings.youtubeAdBlockEnabled = changes.youtubeAdBlockEnabled.newValue;
-    }
-    if (changes.tiktokAdBlockEnabled) {
-      settings.tiktokAdBlockEnabled = changes.tiktokAdBlockEnabled.newValue;
-    }
-    if (changes.facebookAdBlockEnabled) {
-      settings.facebookAdBlockEnabled = changes.facebookAdBlockEnabled.newValue;
-    }
-    if (changes.strictMode) {
-      settings.strictMode = changes.strictMode.newValue;
-    }
-    if (changes.antiTracking) {
-      settings.antiTracking = changes.antiTracking.newValue;
-    }
-    if (changes.blockAnalytics) {
-      settings.blockAnalytics = changes.blockAnalytics.newValue;
+// --- Counters (serialized read-modify-write so concurrent messages don't lose increments) ---
+let counterQueue = Promise.resolve();
+
+function bumpCounter(key, by = 1) {
+  const next = counterQueue.then(async () => {
+    const data = await chrome.storage.local.get(key);
+    const value = (data[key] || 0) + by;
+    await chrome.storage.local.set({ [key]: value });
+    return value;
+  });
+  counterQueue = next.catch(() => {});
+  return next;
+}
+
+// --- Static rulesets follow the user's toggles ---
+async function syncRulesets(settings) {
+  const enableRulesetIds = [];
+  const disableRulesetIds = [];
+  for (const [setting, rulesetId] of Object.entries(SETTING_RULESETS)) {
+    (settings[setting] ? enableRulesetIds : disableRulesetIds).push(rulesetId);
+  }
+  await chrome.declarativeNetRequest.updateEnabledRulesets({ enableRulesetIds, disableRulesetIds });
+}
+
+// --- Threat database -> dynamic redirect rules to the warning page (blocks before the page loads) ---
+const DOMAIN_CATEGORIES = {
+  phishing: 'phishing',
+  malware: 'malware',
+  cryptojacking: 'cryptojacking',
+  pup_domains: 'pup'
+};
+
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function redirectToWarning(threat) {
+  // \0 is the whole match, so every regexFilter below must match the entire URL.
+  return { type: 'redirect', redirect: { regexSubstitution: `${WARNING_URL}?t=${threat}&u=\\0` } };
+}
+
+async function buildThreatRules() {
+  const db = await (await fetch(chrome.runtime.getURL('malicious-domains.json'))).json();
+  const rules = [];
+  let id = 1;
+
+  for (const [category, threat] of Object.entries(DOMAIN_CATEGORIES)) {
+    // "*.example.com" -> example.com (requestDomains already covers subdomains); other wildcards are skipped.
+    const domains = [...new Set(
+      (db[category] || [])
+        .map((p) => p.toLowerCase().replace(/^\*\./, ''))
+        .filter((d) => /^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(d))
+    )];
+    if (domains.length === 0) continue;
+    rules.push({
+      id: id++,
+      priority: 2,
+      action: redirectToWarning(threat),
+      condition: { regexFilter: '^https?://.*', requestDomains: domains, resourceTypes: ['main_frame'] }
+    });
+  }
+
+  const regexRules = [];
+  const tlds = (db.suspicious_tlds || [])
+    .map((t) => t.toLowerCase().replace(/^\./, ''))
+    .filter((t) => /^[a-z0-9-]+$/.test(t));
+  if (tlds.length) {
+    regexRules.push({ threat: 'suspicious', regex: `^https?://[^/?#]*\\.(${tlds.join('|')})([:/?#]|$).*` });
+  }
+  const keywords = (db.scam_keywords || []).filter(Boolean).map((k) => escapeRegex(k.toLowerCase()));
+  if (keywords.length) {
+    // Host and path only: a keyword in a search query must not trigger the warning.
+    regexRules.push({ threat: 'scam', regex: `^https?://[^?#]*(${keywords.join('|')}).*` });
+  }
+
+  for (const { threat, regex } of regexRules) {
+    const { isSupported } = await chrome.declarativeNetRequest.isRegexSupported({ regex, isCaseSensitive: false });
+    if (!isSupported) continue;
+    rules.push({
+      id: id++,
+      priority: 2,
+      action: redirectToWarning(threat),
+      condition: { regexFilter: regex, isUrlFilterCaseSensitive: false, resourceTypes: ['main_frame'] }
+    });
+  }
+
+  return rules;
+}
+
+async function rebuildThreatRules(enabled) {
+  const existing = await chrome.declarativeNetRequest.getDynamicRules();
+  const addRules = enabled ? await buildThreatRules() : [];
+  await chrome.declarativeNetRequest.updateDynamicRules({
+    removeRuleIds: existing.map((r) => r.id),
+    addRules
+  });
+}
+
+// "Proceed anyway" on the warning page: a session allow rule outranks the redirect rules (priority 2).
+function hostRuleId(host) {
+  let h = 0;
+  for (const ch of host) h = (h * 31 + ch.charCodeAt(0)) | 0;
+  return (Math.abs(h) % 2000000000) + 1;
+}
+
+async function allowDomain(host) {
+  const id = hostRuleId(host);
+  await chrome.declarativeNetRequest.updateSessionRules({
+    removeRuleIds: [id],
+    addRules: [{
+      id,
+      priority: 3,
+      action: { type: 'allow' },
+      condition: { requestDomains: [host], resourceTypes: ['main_frame'] }
+    }]
+  });
+}
+
+// --- Lifecycle ---
+chrome.runtime.onInstalled.addListener(async () => {
+  // Fill in only missing keys so an update never overwrites the user's choices.
+  const stored = await chrome.storage.sync.get(null);
+  const missing = {};
+  for (const [key, value] of Object.entries(DEFAULT_SETTINGS)) {
+    if (stored[key] === undefined) missing[key] = value;
+  }
+  if (Object.keys(missing).length) await chrome.storage.sync.set(missing);
+
+  // Updates reset enabled static rulesets to the manifest defaults, so re-apply the user's choices.
+  const settings = await getSettings();
+  await syncRulesets(settings);
+  await rebuildThreatRules(settings.securityProtection);
+});
+
+chrome.storage.onChanged.addListener(async (changes, namespace) => {
+  if (namespace !== 'sync') return;
+  try {
+    if (Object.keys(SETTING_RULESETS).some((key) => changes[key])) {
+      await syncRulesets(await getSettings());
     }
     if (changes.securityProtection) {
-      settings.securityProtection = changes.securityProtection.newValue;
+      await rebuildThreatRules(changes.securityProtection.newValue !== false);
     }
-    if (changes.language) {
-      settings.language = changes.language.newValue;
-    }
+  } catch (e) {
+    console.error('[Waveguard] Не удалось применить настройки:', e);
   }
 });
 
-// Функция для сохранения счётчиков с задержкой (debounce)
-function saveBlockedCount() {
-  if (saveTimeout) {
-    clearTimeout(saveTimeout);
-  }
-  
-  saveTimeout = setTimeout(() => {
-    chrome.storage.local.set({ 
-      blockedAdsCount: blockedAdsCount,
-      blockedThreatsCount: blockedThreatsCount
-    });
-  }, 1000); // Сохраняем не чаще раза в секунду
-}
+// --- Messages ---
+const HOST_RE = /^[a-z0-9-]+(\.[a-z0-9-]+)*$/;
 
-// Обработка сообщений от content scripts
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'adBlocked') {
-    // Проверяем настройки из кэша (быстрее чем storage)
-    if (settings.adBlockEnabled) {
-      // Увеличиваем счетчик в памяти
-      blockedAdsCount++;
-      
-      // Сохраняем с задержкой
-      saveBlockedCount();
-      
-      // Отправляем текущее значение
-      sendResponse({ success: true, count: blockedAdsCount });
-    } else {
-      sendResponse({ success: false });
+async function handleMessage(message, sender) {
+  switch (message.action) {
+    case 'adBlocked': {
+      const settings = await getSettings();
+      if (!settings.adBlockEnabled) return { success: false };
+      const by = Math.min(Math.max(parseInt(message.count, 10) || 1, 1), 1000);
+      return { success: true, count: await bumpCounter('blockedAdsCount', by) };
     }
-  } else if (request.action === 'threatBlocked') {
-    // Угроза безопасности заблокирована
-    if (settings.securityProtection) {
-      blockedThreatsCount++;
-      saveBlockedCount();
-      
-      console.log('[Waveguard Security] Угроза заблокирована:', request.threat);
-      sendResponse({ success: true, threatsCount: blockedThreatsCount });
-    } else {
-      sendResponse({ success: false });
+    case 'threatBlocked': {
+      const settings = await getSettings();
+      if (!settings.securityProtection) return { success: false };
+      return { success: true, threatsCount: await bumpCounter('blockedThreatsCount') };
     }
-  } else if (request.action === 'getBlockedCount') {
-    // Запрос текущего значения счётчиков
-    sendResponse({ 
-      count: blockedAdsCount,
-      threatsCount: blockedThreatsCount
-    });
-  } else if (request.action === 'resetBlockedCount') {
-    // Сброс счётчиков
-    blockedAdsCount = 0;
-    blockedThreatsCount = 0;
-    chrome.storage.local.set({ 
-      blockedAdsCount: 0,
-      blockedThreatsCount: 0
-    });
-    sendResponse({ success: true, count: 0, threatsCount: 0 });
-  } else if (request.action === 'getSettings') {
-    // Быстрый доступ к настройкам из кэша
-    sendResponse({ settings: settings });
-  } else if (request.action === 'getDesktopStatus') {
-    const isConnected = desktopSocket && desktopSocket.readyState === WebSocket.OPEN;
-    sendResponse({ connected: isConnected });
-  }
-  
-  return true; // Необходимо для асинхронного ответа
-});
-
-
-// --- Waveguard URL Tracking Remover ---
-const TRACKING_PARAMS = [
-  'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-  'fbclid', 'gclid', 'gclsrc', 'dclid', 'zanpid',
-  'msclkid', 'mc_eid', '_bta_tid', '_bta_c', 'igshid', '_hsenc', '_hsmi'
-];
-
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url) {
-    try {
-      const url = new URL(changeInfo.url);
-      let paramsRemoved = false;
-      
-      TRACKING_PARAMS.forEach(param => {
-        if (url.searchParams.has(param)) {
-          url.searchParams.delete(param);
-          paramsRemoved = true;
-        }
-      });
-      
-      if (paramsRemoved) {
-        chrome.tabs.update(tabId, { url: url.toString() });
-      }
-    } catch (e) {
-      // Invalid URL
+    case 'getBlockedCount': {
+      const data = await chrome.storage.local.get(['blockedAdsCount', 'blockedThreatsCount']);
+      return { count: data.blockedAdsCount || 0, threatsCount: data.blockedThreatsCount || 0 };
+    }
+    case 'resetBlockedCount':
+      await chrome.storage.local.set({ blockedAdsCount: 0, blockedThreatsCount: 0 });
+      return { success: true, count: 0, threatsCount: 0 };
+    case 'getSettings':
+      return { settings: await getSettings() };
+    case 'getDesktopStatus':
+      return { connected: !!desktopSocket && desktopSocket.readyState === WebSocket.OPEN };
+    case 'allowDomain': {
+      // Only the warning page itself may whitelist a host.
+      const host = String(message.host || '').toLowerCase();
+      if (!sender.url || !sender.url.startsWith(WARNING_URL) || !HOST_RE.test(host)) return { success: false };
+      await allowDomain(host);
+      return { success: true };
     }
   }
-});
-// --------------------------------------
 
-// --- WAVEGUARD DESKTOP INTEGRATION (WEBSOCKETS) ---
-let desktopSocket = null;
-let reconnectTimer = null;
-
-function connectToDesktop() {
-  if (desktopSocket && (desktopSocket.readyState === WebSocket.OPEN || desktopSocket.readyState === WebSocket.CONNECTING)) {
-    return;
-  }
-
-  console.log("Connecting to WaveguardDesktop WebSocket...");
-  desktopSocket = new WebSocket("ws://127.0.0.1:18765");
-
-  desktopSocket.onopen = () => {
-    console.log("Successfully connected to WaveguardDesktop!");
-    if (reconnectTimer) {
-      clearTimeout(reconnectTimer);
-      reconnectTimer = null;
-    }
-  };
-
-  desktopSocket.onmessage = (event) => {
-    console.log("Received message from WaveguardDesktop:", event.data);
-  };
-
-  desktopSocket.onclose = () => {
-    console.warn("Disconnected from WaveguardDesktop. Retrying in 5s...");
-    desktopSocket = null;
-    reconnectTimer = setTimeout(connectToDesktop, 5000);
-  };
-
-  desktopSocket.onerror = (err) => {
-    console.error("WebSocket error:", err);
-  };
-}
-
-// Initial connection attempt
-connectToDesktop();
-
-// Listen for messages from content scripts to forward to Desktop
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'SCAN_FILE_HASH' || message.type === 'DOM_THREAT_REPORT') {
     if (desktopSocket && desktopSocket.readyState === WebSocket.OPEN) {
       desktopSocket.send(JSON.stringify({
@@ -260,11 +217,43 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         data: message.payload,
         tabId: sender.tab ? sender.tab.id : null
       }));
-      sendResponse({ status: "sent_to_desktop" });
-    } else {
-      sendResponse({ status: "desktop_disconnected" });
+      return { status: 'sent_to_desktop' };
     }
+    return { status: 'desktop_disconnected' };
   }
+  return undefined;
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  handleMessage(message, sender)
+    .then(sendResponse)
+    .catch((e) => sendResponse({ success: false, error: String(e) }));
   return true;
 });
 
+// --- Waveguard Desktop integration (WebSocket) ---
+let desktopSocket = null;
+
+function connectToDesktop() {
+  if (desktopSocket && (desktopSocket.readyState === WebSocket.OPEN || desktopSocket.readyState === WebSocket.CONNECTING)) {
+    return;
+  }
+
+  const socket = new WebSocket('ws://127.0.0.1:18765');
+  desktopSocket = socket;
+
+  socket.onopen = () => console.log('[Waveguard] Подключено к WaveguardDesktop');
+  socket.onmessage = (event) => console.log('[Waveguard] Сообщение от Desktop:', event.data);
+  socket.onclose = () => {
+    if (desktopSocket === socket) desktopSocket = null;
+  };
+  socket.onerror = () => {};
+}
+
+// Alarms (min period 30s) survive worker shutdown, unlike setTimeout.
+chrome.alarms.create('desktop-reconnect', { periodInMinutes: 0.5 });
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === 'desktop-reconnect') connectToDesktop();
+});
+
+connectToDesktop();
