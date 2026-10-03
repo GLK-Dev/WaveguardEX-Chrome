@@ -2,7 +2,7 @@
 
 let isCookieBlockerEnabled = true;
 
-chrome.storage.local.get(['cookieBlockerEnabled'], (result) => {
+chrome.storage.sync.get(['cookieBlockerEnabled'], (result) => {
   if (result.cookieBlockerEnabled !== undefined) {
     isCookieBlockerEnabled = result.cookieBlockerEnabled;
   }

@@ -120,9 +120,11 @@
 
   // Функция для сопоставления паттернов (поддержка wildcards)
   function matchPattern(hostname, pattern) {
-    pattern = pattern.toLowerCase().replace(/\*/g, '.*').replace(/\./g, '\\.');
-    const regex = new RegExp('^' + pattern + '$');
-    return regex.test(hostname);
+    pattern = pattern.toLowerCase();
+    // "*.example.com" покрывает и сам example.com
+    if (pattern.startsWith('*.') && hostname === pattern.slice(2)) return true;
+    const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+    return new RegExp('^' + escaped + '$').test(hostname);
   }
 
   // Проверка текущей страницы
@@ -187,9 +189,7 @@
         </p>
         <p style="color: #666; font-size: 14px; margin-bottom: 30px;">
           <strong>URL:</strong><br>
-          <code style="background: #f3f4f6; padding: 5px 10px; border-radius: 5px; word-break: break-all;">
-            ${window.location.href}
-          </code>
+          <code id="WaveguardUrl" style="background: #f3f4f6; padding: 5px 10px; border-radius: 5px; word-break: break-all;"></code>
         </p>
         <button id="WaveguardGoBack" style="
           background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -223,7 +223,7 @@
     `;
 
     document.body.appendChild(overlay);
-
+    overlay.querySelector('#WaveguardUrl').textContent = window.location.href;
     // Обработчики кнопок
     document.getElementById('WaveguardGoBack').addEventListener('click', () => {
       window.history.back();
@@ -330,21 +330,6 @@
         lastURL = window.location.href;
       }
     }, 1000);
-
-    // Перехватываем программные клики по ссылкам (попытка автозагрузки)
-    const originalClick = HTMLAnchorElement.prototype.click;
-    HTMLAnchorElement.prototype.click = function() {
-      if (!userInteracted && (this.hasAttribute('download') || this.href.match(/\.(exe|msi|bat|cmd|scr|vbs)$/i))) {
-        console.warn('[Waveguard Security] Заблокирована скрытая автозагрузка файла:', this.href);
-        blockedThreatsCount++;
-        chrome.runtime.sendMessage({ 
-          action: 'threatBlocked',
-          threat: 'pup_download'
-        });
-        return; // Блокируем клик
-      }
-      return originalClick.apply(this, arguments);
-    };
   }
 
   // Инициализация всех защитных механизмов

@@ -25,10 +25,7 @@
     '[class*="advertising"]',
     'div[data-ad]',
     '.video-card-ad',
-    '[aria-label*="ad"]',
-    '[aria-label*="Ad"]',
     '[aria-label*="Sponsored"]',
-    '[class*="sponsor"]',
     '.promoted-video',
     '[data-promoted="true"]'
   ];
@@ -105,22 +102,6 @@
     }
   }
 
-  // Блокируем рекламные запросы
-  const originalFetch = window.fetch;
-  window.fetch = function(...args) {
-    const url = args[0];
-    if (typeof url === 'string' && isEnabled) {
-      if (url.includes('/api/ad/') || 
-          url.includes('/advertising/') ||
-          url.includes('analytics.tiktok.com') ||
-          url.includes('/commercial/')) {
-        console.log('[Waveguard] Заблокирован TikTok рекламный запрос:', url);
-        return Promise.reject(new Error('Blocked by Waveguard'));
-      }
-    }
-    return originalFetch.apply(this, args);
-  };
-
   // Запускаем при загрузке
   removeTikTokAds();
   skipTikTokAdVideo();
@@ -137,12 +118,11 @@
     }
   });
 
-  if (document.body) {
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
+  // At document_start <body> doesn't exist yet, so observe the root element.
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
 
   // Отслеживаем скроллинг для автоматического пропуска
   let scrollTimeout = null;

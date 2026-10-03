@@ -17,14 +17,12 @@
 
   // Селекторы рекламы Facebook
   const facebookAdSelectors = [
-    '[data-pagelet*="FeedUnit_"]',
     'div[data-ad-preview="message"]',
     'div[data-ad-comet-preview="message"]',
     '[role="article"][aria-label*="Sponsored"]',
     '[data-testid="story-sponsored"]',
     'a[href*="facebook.com/ads/"]',
     'a[aria-label*="Sponsored"]',
-    'div[class*="story"][class*="ad"]',
     '[data-store*=\'"is_sponsored":true\']',
     // Instagram (часть Meta)
     'div[class*="CkGkG"]', // Instagram sponsored post
@@ -33,26 +31,17 @@
   ];
 
   // Функция для определения рекламы в Facebook
+  // Метка рекламы - отдельный короткий элемент; поиск слова в тексте поста даёт ложные срабатывания
+  const SPONSORED_LABELS = new Set(['sponsored', 'реклама', 'спонсировано']);
+
   function isFacebookAd(element) {
-    // Проверяем текст "Sponsored" или "Реклама"
-    const sponsoredText = element.textContent || '';
-    if (sponsoredText.includes('Sponsored') || 
-        sponsoredText.includes('Реклама') ||
-        sponsoredText.includes('Рекламa') ||
-        sponsoredText.includes('Sponsored ·')) {
-      return true;
-    }
+    const ariaLabel = (element.getAttribute('aria-label') || '').trim().toLowerCase();
+    if (SPONSORED_LABELS.has(ariaLabel)) return true;
 
-    // Проверяем aria-label
-    const ariaLabel = element.getAttribute('aria-label') || '';
-    if (ariaLabel.includes('Sponsored') || ariaLabel.includes('Реклама')) {
-      return true;
-    }
-
-    // Проверяем наличие рекламных ссылок
-    const adLinks = element.querySelectorAll('a[href*="/ads/"], a[href*="fbclid="]');
-    if (adLinks.length > 0) {
-      return true;
+    for (const node of element.querySelectorAll('span, a, div[aria-label]')) {
+      const text = (node.textContent || '').trim().toLowerCase();
+      const label = (node.getAttribute('aria-label') || '').trim().toLowerCase();
+      if (SPONSORED_LABELS.has(text) || SPONSORED_LABELS.has(label)) return true;
     }
 
     return false;
@@ -130,31 +119,6 @@
     }
   }
 
-  // Блокируем рекламные запросы
-  const originalFetch = window.fetch;
-  window.fetch = function(...args) {
-    const url = args[0];
-    if (typeof url === 'string' && isEnabled) {
-      if (url.includes('/ads/') || 
-          url.includes('/ad_') ||
-          url.includes('facebook.com/tr') ||
-          url.includes('connect.facebook.net/signals') ||
-          url.includes('/adspixel/') ||
-          url.includes('/logging_client_events')) {
-        console.log('[Waveguard] Заблокирован Facebook рекламный запрос');
-        return Promise.reject(new Error('Blocked by Waveguard'));
-      }
-    }
-    return originalFetch.apply(this, args);
-  };
-
-  // Блокируем Facebook Pixel
-  if (window.fbq) {
-    window.fbq = function() {
-      console.log('[Waveguard] Facebook Pixel заблокирован');
-    };
-  }
-
   // Запускаем при загрузке
   setTimeout(removeFacebookAds, 1000); // Задержка для полной загрузки
 
@@ -169,12 +133,11 @@
     }
   });
 
-  if (document.body) {
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
+  // At document_start <body> doesn't exist yet, so observe the root element.
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
 
   // Отслеживаем скроллинг
   let scrollTimeout = null;

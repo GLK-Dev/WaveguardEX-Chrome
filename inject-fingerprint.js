@@ -2,7 +2,7 @@
 
 let isAntiTrackingEnabled = true;
 
-chrome.storage.local.get(['antiTracking'], (result) => {
+chrome.storage.sync.get(['antiTracking'], (result) => {
   if (result.antiTracking !== undefined) {
     isAntiTrackingEnabled = result.antiTracking;
   }

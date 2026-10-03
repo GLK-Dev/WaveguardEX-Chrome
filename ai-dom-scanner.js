@@ -2,11 +2,16 @@
 // Scans DOM for unlabeled or obfuscated native ads by text and structure analysis
 // Optimized with IntersectionObserver and textContent
 
-let isAIHeuristicEnabled = true;
+// Эвристика тяжёлая, поэтому работает только в «Строгом режиме» (по умолчанию выключена)
+let isAIHeuristicEnabled = false;
 
-chrome.storage.local.get(['strictMode'], (result) => {
-  if (result.strictMode !== undefined) {
-    isAIHeuristicEnabled = result.strictMode;
+chrome.storage.sync.get(['strictMode'], (result) => {
+  isAIHeuristicEnabled = result.strictMode === true;
+  if (!isAIHeuristicEnabled) return;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScanner);
+  } else {
+    initScanner();
   }
 });
 
@@ -109,10 +114,4 @@ function initScanner() {
   if (document.body || document.documentElement) {
     domObserver.observe(document.body || document.documentElement, { childList: true, subtree: true });
   }
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initScanner);
-} else {
-    initScanner();
 }

@@ -9,7 +9,7 @@ const SENSITIVE_PATTERNS = [
 
 let isDLPEnabled = true;
 
-chrome.storage.local.get(['dlpProtectionEnabled'], (result) => {
+chrome.storage.sync.get(['dlpProtectionEnabled'], (result) => {
   if (result.dlpProtectionEnabled !== undefined) {
     isDLPEnabled = result.dlpProtectionEnabled;
   }

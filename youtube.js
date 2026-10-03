@@ -257,39 +257,6 @@
     skipAdSegments();
   }, true);
 
-  // Дополнительная защита - блокируем попытки показа рекламы
-  const originalFetch = window.fetch;
-  window.fetch = function(...args) {
-    const url = args[0];
-    if (typeof url === 'string' && isEnabled) {
-      if (url.includes('/api/stats/ads') || 
-          url.includes('/pagead/') || 
-          url.includes('/ptracking') ||
-          url.includes('/ads') ||
-          url.includes('/get_video_info')) {
-        console.log('[Waveguard] Заблокирован запрос рекламы:', url);
-        return Promise.reject(new Error('Blocked by Waveguard'));
-      }
-    }
-    return originalFetch.apply(this, args);
-  };
-
-  // Перехватываем XMLHttpRequest для блокировки рекламных запросов
-  const originalOpen = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function(method, url) {
-    if (typeof url === 'string' && isEnabled) {
-      if (url.includes('/api/stats/ads') || 
-          url.includes('/pagead/') || 
-          url.includes('/ptracking') ||
-          url.includes('/ads')) {
-        console.log('[Waveguard] Заблокирован XHR запрос рекламы:', url);
-        // Перенаправляем на пустой ответ
-        return originalOpen.call(this, method, 'data:text/plain,');
-      }
-    }
-    return originalOpen.apply(this, arguments);
-  };
-
   // Мониторинг изменений в плеере для обнаружения переключения на рекламу
   let lastVideoSrc = '';
   setInterval(() => {

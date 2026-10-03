@@ -18,8 +18,9 @@ let settings = {
   language: 'ru'
 };
 
-// Инициализация настроек при установке
-chrome.runtime.onInstalled.addListener(() => {
+// Инициализация настроек при установке (при обновлении настройки пользователя не трогаем)
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason !== 'install') return;
   chrome.storage.sync.set({
     adBlockEnabled: true,
     youtubeAdBlockEnabled: true,
@@ -62,6 +63,7 @@ chrome.storage.sync.get([
   settings.blockAnalytics = data.blockAnalytics !== false;
   settings.securityProtection = data.securityProtection !== false;
   settings.language = data.language || 'ru';
+  syncAdRuleset();
 });
 
 // Загружаем счётчики при старте
@@ -70,11 +72,21 @@ chrome.storage.local.get(['blockedAdsCount', 'blockedThreatsCount'], (data) => {
   blockedThreatsCount = data.blockedThreatsCount || 0;
 });
 
+// Включает/выключает сетевой рулсет вместе с переключателем блокировки рекламы
+function syncAdRuleset() {
+  chrome.declarativeNetRequest.updateEnabledRulesets(
+    settings.adBlockEnabled
+      ? { enableRulesetIds: ['ruleset_1'] }
+      : { disableRulesetIds: ['ruleset_1'] }
+  ).catch((e) => console.error('[Waveguard] updateEnabledRulesets:', e));
+}
+
 // Слушаем изменения настроек для обновления кэша
 chrome.storage.onChanged.addListener((changes, namespace) => {
   if (namespace === 'sync') {
     if (changes.adBlockEnabled) {
       settings.adBlockEnabled = changes.adBlockEnabled.newValue;
+      syncAdRuleset();
     }
     if (changes.youtubeAdBlockEnabled) {
       settings.youtubeAdBlockEnabled = changes.youtubeAdBlockEnabled.newValue;
