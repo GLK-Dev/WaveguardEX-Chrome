@@ -28,18 +28,45 @@ async function getSettings() {
   return { ...DEFAULT_SETTINGS, ...stored };
 }
 
-// --- Counters (serialized read-modify-write so concurrent messages don't lose increments) ---
-let counterQueue = Promise.resolve();
+// --- Serialized storage updates (concurrent messages must not lose increments or rate-limit entries) ---
+let storageQueue = Promise.resolve();
+
+function serialize(task) {
+  const next = storageQueue.then(task);
+  storageQueue = next.catch(() => {});
+  return next;
+}
 
 function bumpCounter(key, by = 1) {
-  const next = counterQueue.then(async () => {
+  return serialize(async () => {
     const data = await chrome.storage.local.get(key);
     const value = (data[key] || 0) + by;
     await chrome.storage.local.set({ [key]: value });
     return value;
   });
-  counterQueue = next.catch(() => {});
-  return next;
+}
+
+const THREAT_TYPES = new Set([
+  'phishing', 'malware', 'cryptojacking', 'pup', 'suspicious', 'scam', 'pup_download', 'popup', 'ad_iframe'
+]);
+const THREAT_MIN_INTERVAL_MS = 5000;
+
+// A page can forge the "waveguard-threat" window event that the bridge forwards, so only known threat
+// types count, and only once per tab and type per interval.
+function acceptThreatReport(sender, threat) {
+  if (!THREAT_TYPES.has(threat)) return Promise.resolve(false);
+  const key = `${sender.tab ? sender.tab.id : 'none'}:${threat}`;
+  return serialize(async () => {
+    const { threatRate = {} } = await chrome.storage.session.get('threatRate');
+    const now = Date.now();
+    for (const [k, t] of Object.entries(threatRate)) {
+      if (now - t > THREAT_MIN_INTERVAL_MS) delete threatRate[k];
+    }
+    if (threatRate[key]) return false;
+    threatRate[key] = now;
+    await chrome.storage.session.set({ threatRate });
+    return true;
+  });
 }
 
 // --- Static rulesets follow the user's toggles ---
@@ -115,13 +142,20 @@ async function buildThreatRules() {
   return rules;
 }
 
-async function rebuildThreatRules(enabled) {
-  const existing = await chrome.declarativeNetRequest.getDynamicRules();
-  const addRules = enabled ? await buildThreatRules() : [];
-  await chrome.declarativeNetRequest.updateDynamicRules({
-    removeRuleIds: existing.map((r) => r.id),
-    addRules
+// Rebuilds run one at a time so overlapping triggers (install, toggle, maintenance alarm) can't collide on rule ids.
+let rulesQueue = Promise.resolve();
+
+function rebuildThreatRules(enabled) {
+  const next = rulesQueue.then(async () => {
+    const existing = await chrome.declarativeNetRequest.getDynamicRules();
+    const addRules = enabled ? await buildThreatRules() : [];
+    await chrome.declarativeNetRequest.updateDynamicRules({
+      removeRuleIds: existing.map((r) => r.id),
+      addRules
+    });
   });
+  rulesQueue = next.catch(() => {});
+  return next;
 }
 
 // "Proceed anyway" on the warning page: a session allow rule outranks the redirect rules (priority 2).
@@ -145,20 +179,45 @@ async function allowDomain(host) {
 }
 
 // --- Lifecycle ---
-chrome.runtime.onInstalled.addListener(async () => {
-  // Fill in only missing keys so an update never overwrites the user's choices.
-  const stored = await chrome.storage.sync.get(null);
-  const missing = {};
-  for (const [key, value] of Object.entries(DEFAULT_SETTINGS)) {
-    if (stored[key] === undefined) missing[key] = value;
+// Each step is independent: one failing (e.g. unreadable threat list) must not leave the rest unapplied.
+async function applyProtection() {
+  const settings = await getSettings();
+  const steps = [syncRulesets(settings), rebuildThreatRules(settings.securityProtection)];
+  for (const result of await Promise.allSettled(steps)) {
+    if (result.status === 'rejected') console.error('[Waveguard] Не удалось применить защиту:', result.reason);
   }
-  if (Object.keys(missing).length) await chrome.storage.sync.set(missing);
+}
+
+// Recovers from a failed install-time build: dynamic rules persist, so an empty set means they are missing.
+async function ensureThreatRules() {
+  try {
+    const settings = await getSettings();
+    if (!settings.securityProtection) return;
+    const existing = await chrome.declarativeNetRequest.getDynamicRules();
+    if (existing.length === 0) await rebuildThreatRules(true);
+  } catch (e) {
+    console.error('[Waveguard] Не удалось восстановить правила угроз:', e);
+  }
+}
+
+chrome.runtime.onInstalled.addListener(async () => {
+  try {
+    // Fill in only missing keys so an update never overwrites the user's choices.
+    const stored = await chrome.storage.sync.get(null);
+    const missing = {};
+    for (const [key, value] of Object.entries(DEFAULT_SETTINGS)) {
+      if (stored[key] === undefined) missing[key] = value;
+    }
+    if (Object.keys(missing).length) await chrome.storage.sync.set(missing);
+  } catch (e) {
+    console.error('[Waveguard] Не удалось записать настройки по умолчанию:', e);
+  }
 
   // Updates reset enabled static rulesets to the manifest defaults, so re-apply the user's choices.
-  const settings = await getSettings();
-  await syncRulesets(settings);
-  await rebuildThreatRules(settings.securityProtection);
+  await applyProtection();
 });
+
+chrome.runtime.onStartup.addListener(ensureThreatRules);
 
 chrome.storage.onChanged.addListener(async (changes, namespace) => {
   if (namespace !== 'sync') return;
@@ -188,6 +247,7 @@ async function handleMessage(message, sender) {
     case 'threatBlocked': {
       const settings = await getSettings();
       if (!settings.securityProtection) return { success: false };
+      if (!(await acceptThreatReport(sender, message.threat))) return { success: false };
       return { success: true, threatsCount: await bumpCounter('blockedThreatsCount') };
     }
     case 'getBlockedCount': {
@@ -251,9 +311,11 @@ function connectToDesktop() {
 }
 
 // Alarms (min period 30s) survive worker shutdown, unlike setTimeout.
-chrome.alarms.create('desktop-reconnect', { periodInMinutes: 0.5 });
+chrome.alarms.create('maintenance', { periodInMinutes: 0.5 });
 chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'desktop-reconnect') connectToDesktop();
+  if (alarm.name !== 'maintenance') return;
+  connectToDesktop();
+  ensureThreatRules();
 });
 
 connectToDesktop();

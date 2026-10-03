@@ -94,6 +94,37 @@ try {
     assert.equal(outcome, 'blocked');
   });
 
+  await check('forged threat events from a page cannot inflate the counter', async () => {
+    const p = await context.newPage();
+    await p.goto('https://example.com/');
+    const read = () => worker.evaluate(async () => (await chrome.storage.local.get('blockedThreatsCount')).blockedThreatsCount || 0);
+    const emit = (threat, times) => p.evaluate(({ threat, times }) => {
+      for (let i = 0; i < times; i++) window.dispatchEvent(new CustomEvent('waveguard-threat', { detail: { threat } }));
+    }, { threat, times });
+    const settle = () => p.waitForTimeout(500);
+
+    const before = await read();
+    await emit('not_a_real_threat', 5);
+    await settle();
+    assert.equal(await read(), before, 'unknown threat type was counted');
+
+    await emit('scam', 30);
+    await settle();
+    assert.equal(await read(), before + 1, 'burst of 30 should count once');
+  });
+
+  await check('threat rules are rebuilt when they are missing', async () => {
+    const count = await worker.evaluate(async () => {
+      const dnr = chrome.declarativeNetRequest;
+      await dnr.updateDynamicRules({ removeRuleIds: (await dnr.getDynamicRules()).map((r) => r.id) });
+      const emptied = (await dnr.getDynamicRules()).length;
+      if (emptied !== 0) return -1;
+      await ensureThreatRules();
+      return (await dnr.getDynamicRules()).length;
+    });
+    assert.ok(count >= 3, `rules after recovery: ${count}`);
+  });
+
   await check('turning ad blocking off disables the ads ruleset', async () => {
     await worker.evaluate(() => chrome.storage.sync.set({ adBlockEnabled: false }));
     await worker.evaluate(() => new Promise((r) => setTimeout(r, 500)));
