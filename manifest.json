@@ -120,11 +120,17 @@
     {
       "matches": [
         "*://*.chatgpt.com/*",
+        "*://chat.openai.com/*",
         "*://*.claude.ai/*",
         "*://copilot.microsoft.com/*",
-        "*://gemini.google.com/*"
+        "*://gemini.google.com/*",
+        "*://*.perplexity.ai/*",
+        "*://grok.com/*",
+        "*://chat.deepseek.com/*",
+        "*://chat.mistral.ai/*"
       ],
       "js": [
+        "dlp-core.js",
         "dlp.js"
       ],
       "run_at": "document_start"

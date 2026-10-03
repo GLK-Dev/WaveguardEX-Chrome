@@ -140,8 +140,6 @@
       'ytd-companion-slot-renderer',
       '#masthead-ad',
       '#player-ads',
-      '.video-ads',
-      '.ytp-ad-module',
       '.ytp-ad-overlay-container',
       '.ytp-ad-text-overlay',
       'ytd-action-companion-ad-renderer',
@@ -257,23 +255,5 @@
     skipAdSegments();
   }, true);
 
-  // Мониторинг изменений в плеере для обнаружения переключения на рекламу
-  let lastVideoSrc = '';
-  setInterval(() => {
-    const video = document.querySelector('video');
-    if (video && video.src !== lastVideoSrc) {
-      lastVideoSrc = video.src;
-      
-      // Проверяем, не является ли это рекламным видео
-      if (video.src.includes('doubleclick') || 
-          video.src.includes('googleads') ||
-          video.src.includes('googlevideo.com/videoplayback') && document.querySelector('.ad-showing')) {
-        console.log('[Waveguard] Обнаружено рекламное видео, пропускаем...');
-        video.currentTime = video.duration - 0.1;
-        chrome.runtime.sendMessage({ action: 'adBlocked' });
-      }
-    }
-  }, 500);
-
-  console.log('[Waveguard] YouTube ad blocker активирован (агрессивный режим с пропуском сегментов)');
+  console.log('[Waveguard] YouTube ad blocker активирован');
 })();

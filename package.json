@@ -1,0 +1,8 @@
+{
+  "name": "waveguardex-chrome",
+  "private": true,
+  "scripts": {
+    "test": "node --test",
+    "update-threats": "node tools/update-threats.mjs"
+  }
+}
