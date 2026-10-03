@@ -40,11 +40,14 @@
     }
   ];
 
-  function maskSensitive(text) {
+  // final=false is for text still being typed: a match that touches the end of the text may be a prefix of
+  // a longer number (e.g. 15 of 16 card digits already pass Luhn), so it waits for the next keystroke or a final pass.
+  function maskSensitive(text, { final = true } = {}) {
     let masked = String(text);
     let found = false;
     for (const rule of RULES) {
-      masked = masked.replace(rule.regex, (match) => {
+      masked = masked.replace(rule.regex, (match, offset, whole) => {
+        if (!final && offset + match.length === whole.length) return match;
         if (rule.accept && !rule.accept(match)) return match;
         found = true;
         return MASK;

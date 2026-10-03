@@ -1,266 +1,85 @@
-# Waveguard AdBlocker 🛡️ Privacy & Security Suite
-
-A powerful extension for Chrome that blocks ads **and protects against cyber threats**: phishing, malicious sites, cryptojacking, and potentially unwanted programs (PUPs).
-
-## 🚀 Key Features
-
-### Ad Blocking
-- 🚫 **Ad blocking on all sites** - removes banners, pop-up ads, and video ads
-- 📺 **Ad blocking on YouTube** - automatically skips video ads and hides ad banners
-- 🎵 **Ad blocking on TikTok** - removes ads from the feed and skips ad posts
-- 📱 **Ad blocking on Facebook/Instagram** - hides sponsored posts and Stories
-
-### 🚀 Advanced Privacy & Next-Gen Security (New in v5.0!)
-- 🤖 **AI DOM-Analysis** - Smart heuristic blocker for native ads and sponsored content
-- 🛡️ **GenAI Data Protection (DLP)** - Masks sensitive data (PII) before sending to AI chatbots (ChatGPT, Claude)
-- 🍪 **Auto-Reject Cookie Banners** - Automatically clicks "Reject All" or hides cookie consent popups
-- 🕵️‍♂️ **Anti-Fingerprinting** - Anonymizes Canvas, WebGL, and Audio API fingerprints
-- 🔗 **URL Tracking Remover** - Automatically strips tracking tags (UTM, fbclid) from URLs
-- ⚡ **Mini Mode** - Toggle to disable heavy DOM scripts for maximum performance
-### 🛡️ Threat Protection (v4.0)
-- 🎣 **Anti-Phishing** - blocks fake banking sites, stealing passwords
-- ☠️ **Anti-Malware** - prevents drive-by downloads of malware
-- ⛏️ **Anti-Cryptojacking** - blocks hidden mining scripts
-- 🕷️ **PUP Blocking** - prevents download of potentially unwanted programs
-- 🛑 **Pop-up Blocking** - aggressive blocking of pop-up windows
-- 🖱️ **Anti-Clickjacking** - prevents invisible frames
-
-### Convenience
-- 🌍 **Multilingual** - interface in 5 languages (RU, UK, EN, HE, ES)
-- 📊 **Counter** - tracking of blocked ads and threats
-- 🎛️ **Simple interface** - convenient control via popup menu
-- ⚙️ **Detailed settings** - flexible configuration for each function
-
-## 📥 Installation
-
-### Method 1: Loading in Developer Mode
-
-1. Download or clone this repository
-2. Open Chrome and go to the page chrome://extensions/
-3. Enable **Developer mode** (toggle in the top right corner)
-4. Click **Load unpacked**
-5. Select the folder with the Waveguard extension
-6. Done! The extension is installed and active
-
-## 💻 Usage
-
-1. After installation, the extension icon will appear in the Chrome toolbar
-2. Click on the icon to open the control panel
-3. Toggle the switches:
-   - Enable/disable ad blocking on regular sites
-   - Enable/disable ad blocking on YouTube
-   - View the counter of blocked ads
-
-### Automatic Operation
-
-The extension works automatically:
-- On regular sites, it removes video ads, banners, and pop-up ads
-- On YouTube, it automatically skips video ads and hides ad banners
-- Blocks tracking and third-party advertising cookies
-
-## 🛠️ Technical Details
-
-### Project Structure
-
-`
-Waveguard/
-├── manifest.json              # Extension manifest (Manifest V3)
-├── rules.json                 # 55+ blocking rules (declarativeNetRequest)
-├── malicious-domains.json     # Threat database (phishing, malware, pup)
-├── background.js              # Service Worker
-├── content.js                 # General ad blocking
-├── security.js                # 🛡️ Security engine (New)
-├── youtube.js                 # Script for YouTube
-├── tiktok.js                  # Script for TikTok
-├── facebook.js                # Script for Facebook/Instagram
-├── popup.html/css/js          # Control interface
-├── i18n.js                    # Multilingual support (5 languages)
-├── icons/                     # Extension icons
-└── docs/
-    ├── README.md
-    ├── SECURITY.md            # 🛡️ Security Documentation
-    ├── INSTALL.md
-    └── QUICKSTART.md
-`
-
-### Principle of Operation
-
-1. **Background Service Worker** (ackground.js)
-   - Blocks HTTP requests to ad networks (Google Ads, DoubleClick, Yandex Ads, etc.)
-   - Keeps statistics of blocked ads
-
-2. **Content Scripts**
-   - content.js - removes ad elements on all sites via CSS selectors
-   - youtube.js - specialized script for YouTube, which:
-     - Automatically clicks the "Skip Ad" button
-     - Speeds up unskippable ads
-     - Hides ad banners and overlays
-
-3. **Popup Interface**
-   - Shows statistics of blocked ads
-   - Allows controlling extension features
-
-## 🎯 Functions
-
-### Blocked Ad Types
-
-- Google AdSense & DoubleClick
-- Yandex.Direct
-- Banners and pop-up windows
-- Video ads on YouTube
-- Text overlays
-- Sponsored content
-- Teaser networks (Taboola, Outbrain, Criteo, etc.)
-
-### 🛡️ Blocked Threats
-
-**Phishing:**
-- Fake banking sites
-- Fake login pages (PayPal, Google, Apple, etc.)
-- Fraudulent verification pages
-
-**Malware:**
-- Malware hosts
-- Drive-by downloads
-- Exploit kits
-
-**Cryptojacking (Hidden miners):**
-- CoinHive, JSEcoin, CryptoLoot
-- WebMinePool, MoneroMiner
-- And other web miners
-
-**PUPs (Potentially Unwanted Programs):**
-- Toolbars and adware
-- Fake optimizers
-- Driver updaters
-- Download managers
-
-**Suspicious Zones:**
-- .tk, .ml, .ga, .cf, .gq zones
-- Scam domains (win-prize, free-iphone, etc.)
-
-### YouTube Blocking Features
-
-- ⚡ Instant ad skipping
-- ⏩ Speeding up unskippable videos by 16x
-- 🧹 Removing banners and overlays
-- 🔄 Works on page navigation (SPA)
-- 🛡️ Ignores all types of YouTube ads
-
-## ⚙️ Settings
-
-### Main Settings
-- dBlockEnabled - Ad blocking on regular sites
-- youtubeAdBlockEnabled - Ad blocking on YouTube
-- 	iktokAdBlockEnabled - Ad blocking on TikTok
-- acebookAdBlockEnabled - Ad blocking on Facebook/Meta
-
-### Advanced Settings
-- strictMode - Strict mode (element removal)
-- ntiTracking - Anti-tracking protection
-- lockAnalytics - Analytics blocking
-- securityProtection - 🛡️ **Anti-Phishing/Malware protection**
-- language - UI Language (ru/uk/en/he/es)
-
-### Statistics
-- lockedAdsCount - Number of blocked ads
-- lockedThreatsCount - 🛡️ **Number of blocked threats**
-
-## 📚 Documentation
-
-- **[SECURITY.md](SECURITY.md)** - 🛡️ Detailed documentation on security features
-- **[INSTALL.md](INSTALL.md)** - Installation instructions
-- **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide
-
-## 🔒 Security and Privacy
-
-- ✅ **Local operation** - all checks occur on your device
-- ✅ **No data collection** - we do not send statistics to servers
-- ✅ **No tracking** - we do not collect browsing history
-- ✅ **Open source code** - code is available for review
-- ✅ **Manifest V3** - modern Chrome security standard
-
-## 🆚 Why Waveguard?
-
-| Feature | Waveguard v5.0 | AdBlock Plus | uBlock Origin |
-|---------|---------------|--------------|---------------|
-| Ad Blocking | ✅ | ✅ | ✅ |
-| YouTube Skipping | ✅ | Partially | Partially |
-| TikTok/Facebook | ✅ | ❌ | ❌ |
-| Anti-Phishing | ✅ | ❌ | ❌ |
-| Anti-Malware | ✅ | ❌ | ❌ |
-| Anti-Cryptojacking| ✅ | Partially | ✅ |
-| PUP Blocking | ✅ | ❌ | ❌ |
-| Multilingual | 5 languages | 40+ | 20+ |
-| Threat Counter | ✅ | ❌ | ❌ |
-| Local Operation | ✅ | ✅ | ✅ |
-
-## 👨‍💻 Development
-
-### Requirements
-
-- Google Chrome 88+ (or Chromium-based browser)
-- Basic knowledge of JavaScript ES6+, HTML5, CSS3
-- Understanding of Chrome Extension Manifest V3
-
-### Modification
-
-You can easily configure the extension for your needs:
-
-1. **Add domains to block** - edit the dDomains array in ackground.js
-2. **Add CSS selectors** - edit the dSelectors array in content.js or youtube.js
-3. **Change interface** - edit popup.html and popup.css
-
-### Debugging
-
-1. Open chrome://extensions/
-2. Find Waveguard AdBlocker
-3. Click "Details" -> "Inspect views: service worker"
-4. Use Console for debugging
-
-## 📌 Notes
-
-- The extension uses Manifest V3 (the latest standard for Chrome)
-- Works completely locally, does not send data to external servers
-- Does not require creating an account or registration
-- Completely free and open-source
-
-## ⚠️ Limitations
-
-- Some sites can detect ad blockers
-- YouTube may periodically update the page layout, which will require updating the selectors
-- Works only in Chromium-based browsers (Chrome, Edge, Opera, etc.)
-
-## 🛡️ Privacy
-
-The extension:
-- ❌ Does not collect personal data
-- ❌ Does not track user activity
-- ✅ Works completely locally
-- ✅ Does not require access to accounts
-
-## 📄 License
-
-MIT License - free to use and modify the code.
-
-## 🤝 Contribution to the project
-
-Pull requests with improvements are welcome:
-- New ad domains to block
-- Better selectors
-- Bug fixes
-- Interface improvements
-
-## 🐛 Known Issues
-
-- On some sites, ads can load dynamically and bypass
-- YouTube may periodically change the selectors of ad elements
-
-## 📞 Support
-
-If you find a bug or have a suggestion, create an Issue in the repository.
-
----
-
-**Made with ❤️ for a free Internet without ads**
-
+# Waveguard AdBlocker
+
+Manifest V3 Chrome extension that blocks ads and trackers, warns about known malicious sites, reduces browser fingerprinting and masks sensitive data typed into AI chats. Optional companion app: [WaveguardDesktop](../WaveguardDesktop) (on-demand file scanner and quarantine).
+
+Current version: **5.1.0** (requires Chrome 120+). See [PRIVACY.md](PRIVACY.md) and [SECURITY.md](SECURITY.md).
+
+## Features
+
+| Area | What it does | How |
+|---|---|---|
+| Ads | Blocks ad-network requests; hides ad elements | `declarativeNetRequest` ruleset `ads`; cosmetic content scripts |
+| YouTube / TikTok / Facebook & Instagram | Skips or hides ads and sponsored posts | Dedicated content scripts (DOM based, may need updates when the sites change) |
+| Trackers & analytics | Blocks common tracker requests | Ruleset `trackers` (toggle: *Block analytics*) |
+| Tracking parameters | Strips `utm_*`, `fbclid`, `gclid`, ... from page URLs | DNR `queryTransform`, no tab reloads (toggle: *Anti-tracking*) |
+| Malicious sites | Full-page warning *before* the site loads; "proceed anyway" is allowed per host for the session | Dynamic DNR redirect rules built from `malicious-domains.json` |
+| Cryptojacking | Blocks known miner hosts and Worker URLs | Ruleset `miners` + page guard |
+| Pop-ups | Limits rapid `window.open` bursts | MAIN-world page guard |
+| Risky downloads | Asks before following links to executables that look like adware installers | Content script |
+| Anti-fingerprinting | Seeded noise for canvas and audio, normalised `hardwareConcurrency` / `deviceMemory` | MAIN-world script; never modifies the visible canvas |
+| GenAI DLP | Masks card numbers (Luhn-checked), e-mails and phone numbers typed or pasted into ChatGPT, Claude, Copilot, Gemini, Perplexity, Grok, DeepSeek, Mistral | Content script |
+| Cookie banners | Clicks "reject" or hides common consent banners | Content script |
+| Strict mode | Extra heuristic that hides unlabeled "Sponsored"/"Ad" blocks (off by default, can over-hide) | Content script |
+
+UI languages: RU, UK, EN, HE, ES.
+
+## Installation
+
+1. Clone or download this repository.
+2. Open `chrome://extensions`, enable **Developer mode**.
+3. **Load unpacked** and select the `WaveguardEX-Chrome` folder.
+
+## Threat data
+
+`malicious-domains.json` is a snapshot refreshed by the developer, not at runtime:
+
+```
+npm run update-threats
+```
+
+| Category | Source | Notes |
+|---|---|---|
+| `malware` | [abuse.ch URLhaus](https://urlhaus.abuse.ch/api/) host file (CC0) | Hosts currently serving malware |
+| `phishing` | [OpenPhish community feed](https://openphish.com/terms.html) | Non-commercial use only; only dedicated phishing hosts (path `/`) |
+| `cryptojacking`, `suspicious_tlds`, `scam_keywords` | Hand-maintained | |
+| `pup_domains` | none | No reliable public feed; intentionally empty |
+
+Phishing domains live for hours to days, so a snapshot ages quickly. Re-run the updater before each release.
+
+## Development
+
+```
+npm test        # unit tests (DLP logic, manifest and ruleset integrity)
+npm run e2e     # real Chromium with the extension loaded (needs: npx playwright install chromium)
+```
+
+The E2E run checks: enabled rulesets, warning redirect for malware and phishing hosts, "proceed" allow-rule, tracking-parameter stripping, ad request blocking, the ad-block toggle, and DLP in a textarea and a contenteditable.
+
+### Layout
+
+```
+manifest.json            MV3 manifest
+background.js            Service worker: settings -> rulesets, threat rules, counters, Desktop link (stateless)
+rules/                   Static DNR rulesets: ads, trackers, miners, tracking-params
+malicious-domains.json   Threat snapshot (see above)
+warning.html / .js       Interstitial for blocked sites
+page-guard*.js           MAIN-world pop-up / miner guard + bridge to extension APIs
+anti-fingerprint.js      MAIN-world fingerprint protection
+dlp-core.js / dlp.js     GenAI DLP (pure logic + DOM glue)
+content.js, youtube.js, tiktok.js, facebook.js, cookie-banner.js, ai-dom-scanner.js, security.js
+popup.html / .js / .css, i18n.js
+tools/update-threats.mjs Threat snapshot updater
+tests/                   Unit tests and E2E script
+```
+
+## Limitations
+
+- MV3 filtering is declarative: rule counts are limited and rules update only with the extension (or via dynamic rules).
+- YouTube, TikTok and Facebook ad hiding relies on page structure and can break when those sites change; YouTube may also serve ads inside the video stream, which this extension cannot remove.
+- Do not run it together with another content blocker.
+
+## Changelog
+
+- **5.1.0** - Rulesets rewritten to anchored `||domain^` filters and split by feature; warning interstitial before page load; stateless service worker; MAIN-world anti-fingerprinting with stable noise; DLP rewritten (Luhn, paste handling, React-safe); real malware/phishing feeds; permissions reduced to `storage`, `declarativeNetRequest`, `alarms`; fixes for Facebook feed removal and TikTok/Facebook observers; E2E tests.
+- **5.0.x** - Privacy suite (DLP, anti-fingerprinting, cookie banners), YouTube/ad-blocker false-positive fixes.
+- **4.0.0** - Security edition (see [RELEASE-v4.0.0.md](RELEASE-v4.0.0.md)).

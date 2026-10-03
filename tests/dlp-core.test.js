@@ -36,3 +36,10 @@ test('luhnValid', () => {
   assert.equal(luhnValid('79927398713'), true);
   assert.equal(luhnValid('79927398710'), false);
 });
+
+test('while typing, a match at the very end waits; a final pass masks it', () => {
+  assert.equal(maskSensitive('card 4111111111111111', { final: false }).found, false);
+  assert.equal(maskSensitive('card 4111111111111111 ', { final: false }).found, true);
+  assert.equal(maskSensitive('card 4111111111111111', { final: true }).found, true);
+  assert.equal(maskSensitive('mail a.b@example.com', { final: false }).found, false);
+});

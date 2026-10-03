@@ -19,7 +19,7 @@ Waveguard не собирает, не передаёт и не продаёт д
 - Доступ ко всем сайтам (`<all_urls>`) — блокировка рекламных элементов на странице, защита от слежки (anti-fingerprint), скрытие баннеров cookie. Содержимое страниц не покидает ваш браузер.
 
 ## Сторонние данные
-Список вредоносных узлов в `malicious-domains.json` обновляется разработчиком при выпуске версии из открытого списка abuse.ch URLhaus (CC0). Расширение само ничего не скачивает во время работы.
+Список вредоносных и фишинговых узлов в `malicious-domains.json` обновляется разработчиком при выпуске версии из открытых списков abuse.ch URLhaus (CC0) и OpenPhish Community Feed (для некоммерческого использования). Расширение само ничего не скачивает во время работы.
 
 Использование информации соответствует Chrome Web Store User Data Policy, включая требования Limited Use.
 
@@ -29,4 +29,4 @@ Waveguard не собирает, не передаёт и не продаёт д
 ---
 
 # English summary
-Waveguard collects, transmits and sells no user data and has no telemetry. Settings live in `chrome.storage.sync`, counters in `chrome.storage.local`. Page URLs are matched against the local threat list by the browser itself; text typed into AI chats is masked in memory only. Hash lookups go to Waveguard Desktop on `127.0.0.1` exclusively. The threat list is refreshed by the developer from the abuse.ch URLhaus feed (CC0) at release time. The use of information adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements.
+Waveguard collects, transmits and sells no user data and has no telemetry. Settings live in `chrome.storage.sync`, counters in `chrome.storage.local`. Page URLs are matched against the local threat list by the browser itself; text typed into AI chats is masked in memory only. Hash lookups go to Waveguard Desktop on `127.0.0.1` exclusively. The threat list is refreshed by the developer from the abuse.ch URLhaus (CC0) and OpenPhish community feeds at release time. The use of information adheres to the Chrome Web Store User Data Policy, including the Limited Use requirements.

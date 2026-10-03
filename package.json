@@ -3,6 +3,10 @@
   "private": true,
   "scripts": {
     "test": "node --test",
+    "e2e": "node tests/e2e/run.mjs",
     "update-threats": "node tools/update-threats.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
   }
 }

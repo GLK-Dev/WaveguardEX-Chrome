@@ -31,13 +31,13 @@
     el.dispatchEvent(new Event('input', { bubbles: true }));
   }
 
-  function maskTextNodes(root) {
+  function maskTextNodes(root, final) {
     let found = false;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
     let node;
     while ((node = walker.nextNode())) {
       if (!node.nodeValue || !node.nodeValue.trim()) continue;
-      const { masked, found: hit } = maskSensitive(node.nodeValue);
+      const { masked, found: hit } = maskSensitive(node.nodeValue, { final });
       if (hit) {
         node.nodeValue = masked;
         found = true;
@@ -57,19 +57,19 @@
 
   let busy = false;
 
-  function handleInput(event) {
+  // final=false while typing (see dlp-core.js); true when the text is about to leave the field.
+  function maskField(target, final) {
     if (!isDLPEnabled || busy) return;
-    const target = event.target;
     busy = true;
     try {
       if (isTextField(target)) {
-        const { masked, found } = maskSensitive(target.value);
+        const { masked, found } = maskSensitive(target.value, { final });
         if (found) {
           replaceFieldValue(target, masked);
           showWarning();
         }
       } else if (target && target.isContentEditable) {
-        if (maskTextNodes(target)) {
+        if (maskTextNodes(target, final)) {
           moveCaretToEnd(target);
           showWarning();
         }
@@ -78,6 +78,8 @@
       busy = false;
     }
   }
+
+  const handleInput = (event) => maskField(event.target, false);
 
   // Mask pasted text before it is inserted so the original never reaches the page's input handlers.
   function handlePaste(event) {
@@ -118,4 +120,10 @@
 
   document.addEventListener('input', handleInput, true);
   document.addEventListener('paste', handlePaste, true);
+  // Final pass before the text can be sent: Enter, leaving the field (e.g. clicking Send), form submit.
+  document.addEventListener('keydown', (e) => { if (e.key === 'Enter') maskField(e.target, true); }, true);
+  document.addEventListener('focusout', (e) => maskField(e.target, true), true);
+  document.addEventListener('submit', (e) => {
+    for (const field of e.target.querySelectorAll('textarea, input')) maskField(field, true);
+  }, true);
 })();
