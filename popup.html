@@ -13,7 +13,13 @@
     <div class="header">
       <h1>🛡️ Waveguard</h1>
       <p class="subtitle" data-i18n="subtitle">Блокировщик рекламы</p>
-      <select id="languageSelector" class="language-selector">
+      
+      <div id="desktopStatus" style="margin-top: 10px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(0,0,0,0.1); border-radius: 12px; font-size: 11px;">
+        <div id="desktopDot" style="width: 8px; height: 8px; border-radius: 50%; background: #dc2626;"></div>
+        <span id="desktopText">Десктоп отключен</span>
+      </div>
+
+      <select id="languageSelector" class="language-selector" style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto;">
         <option value="ru">RU</option>
         <option value="uk">UA</option>
         <option value="en">EN</option>

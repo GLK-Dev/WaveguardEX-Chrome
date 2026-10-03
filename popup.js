@@ -186,5 +186,26 @@ const miniModeToggle = document.getElementById('miniModeToggle');
       threatsCountElement.textContent = result.blockedThreatsCount || 0;
     });
   }, 1000);
+
+  // Проверка статуса подключения к Десктопу
+  const desktopDot = document.getElementById('desktopDot');
+  const desktopText = document.getElementById('desktopText');
+  
+  function checkDesktopConnection() {
+    chrome.runtime.sendMessage({ action: 'getDesktopStatus' }, (response) => {
+      if (chrome.runtime.lastError || !response) return;
+      if (response.connected) {
+        desktopDot.style.background = '#4CAF50';
+        desktopText.textContent = 'Десктоп подключен';
+      } else {
+        desktopDot.style.background = '#dc2626';
+        desktopText.textContent = 'Десктоп отключен';
+      }
+    });
+  }
+
+  // Проверяем при загрузке и каждые 3 секунды
+  checkDesktopConnection();
+  setInterval(checkDesktopConnection, 3000);
 });
 

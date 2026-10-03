@@ -162,6 +162,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.action === 'getSettings') {
     // Быстрый доступ к настройкам из кэша
     sendResponse({ settings: settings });
+  } else if (request.action === 'getDesktopStatus') {
+    const isConnected = desktopSocket && desktopSocket.readyState === WebSocket.OPEN;
+    sendResponse({ connected: isConnected });
   }
   
   return true; // Необходимо для асинхронного ответа
@@ -197,3 +200,59 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 // --------------------------------------
+
+// --- WAVEGUARD DESKTOP INTEGRATION (WEBSOCKETS) ---
+let desktopSocket = null;
+let reconnectTimer = null;
+
+function connectToDesktop() {
+  if (desktopSocket && (desktopSocket.readyState === WebSocket.OPEN || desktopSocket.readyState === WebSocket.CONNECTING)) {
+    return;
+  }
+
+  console.log("Connecting to WaveguardDesktop WebSocket...");
+  desktopSocket = new WebSocket("ws://127.0.0.1:18765");
+
+  desktopSocket.onopen = () => {
+    console.log("Successfully connected to WaveguardDesktop!");
+    if (reconnectTimer) {
+      clearTimeout(reconnectTimer);
+      reconnectTimer = null;
+    }
+  };
+
+  desktopSocket.onmessage = (event) => {
+    console.log("Received message from WaveguardDesktop:", event.data);
+  };
+
+  desktopSocket.onclose = () => {
+    console.warn("Disconnected from WaveguardDesktop. Retrying in 5s...");
+    desktopSocket = null;
+    reconnectTimer = setTimeout(connectToDesktop, 5000);
+  };
+
+  desktopSocket.onerror = (err) => {
+    console.error("WebSocket error:", err);
+  };
+}
+
+// Initial connection attempt
+connectToDesktop();
+
+// Listen for messages from content scripts to forward to Desktop
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'SCAN_FILE_HASH' || message.type === 'DOM_THREAT_REPORT') {
+    if (desktopSocket && desktopSocket.readyState === WebSocket.OPEN) {
+      desktopSocket.send(JSON.stringify({
+        type: message.type,
+        data: message.payload,
+        tabId: sender.tab ? sender.tab.id : null
+      }));
+      sendResponse({ status: "sent_to_desktop" });
+    } else {
+      sendResponse({ status: "desktop_disconnected" });
+    }
+  }
+  return true;
+});
+
